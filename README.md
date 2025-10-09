@@ -1,11 +1,14 @@
-# shapespresso ☕️
+# DoubleShapespresso ☕️☕️
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17128093.svg)](https://doi.org/10.5281/zenodo.17128093)
-
-
-This repository contains the code, data, and instructions to reproduce the experiments from 
+This repository contains the code, data, and instructions to extend the experiments from 
 our EMNLP 2025 paper "Schema Generation for Large Knowledge Graphs Using Large Language Models"
 [[arXiv](https://arxiv.org/abs/2506.04512)].
+
+Extension to Text2KGBench micro-ontologies :
+- DBpedia / SHACL 
+- WD / Shex
+Translation of Yago to SHACL.
+
 
 ## Setup Environment
 
