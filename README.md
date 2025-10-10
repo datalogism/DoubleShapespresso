@@ -16,6 +16,8 @@ Translation of Yago to SHACL.
 - [ ] First draft Wikidata annotation  based on Text2KGBench micro-ontologies
 - [x] Developing scripts for DBpedia statistics needed for global settings
 - [x] Adapting the prompts to local/triples/global settings adapted to DBpedia/SHACL
+- [x] Generate prompt for Yago / SHACL 
+- [ ] Generate prompt for DBpedia / SHACL (triples no finished)
 - [x] Adapting generation for local / triple settings
 - [ ] Adapting generation for global setting
 - [ ] Adapting the evalution to SHACL
