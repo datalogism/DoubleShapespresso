@@ -44,25 +44,31 @@ java -Xmx10g -jar corese-server-4.5.0.jar -init "config.properties"
 ### YAGO SHACL
 #### local
 ```text
-python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/local/yago/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/yago/Scientist.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json```
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/local/yago/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/yago/Scientist.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json
+```
 
 #### global
 ```text
-python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/global/yago/entity_id/5 --mode global --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path resources/yagos_global_few_shot_examples.toml --save_log --graph_info_path resources/yagos_predicate_count_instances.json```
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/global/yago/entity_id/5 --mode global --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path resources/yagos_global_few_shot_examples.toml --save_log --graph_info_path resources/yagos_predicate_count_instances.json
+```
 
 #### triples
 ```text
-python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/triples/yago/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path dataset/SHACL/yago/Airline.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json```
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/triples/yago/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path dataset/SHACL/yago/Airline.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json
+```
 
 ### DBPedia SHACL
 #### local
 ```text
-python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/local/dbpedia/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json```
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/local/dbpedia/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json
+```
 
 #### global
 ```text
-python main.py--task prompt --dataset dbpedia --output_dir output/prompts/global/dbpedia/entity_id/5 --mode global --syntax SHACL --num_instances 1 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-0/AirportShapeTXT2KG_clean.ttl --save_log --endpoint_url "http://localhost:8080/sparql"```
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/global/dbpedia/entity_id/5 --mode global --syntax SHACL --num_instances 1 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-0/AirportShapeTXT2KG_clean.ttl --save_log --endpoint_url "http://localhost:8080/sparql"
+```
 #### triples
 ```text
-python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/triples/dbpedia/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json```
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/triples/dbpedia/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json
+```
 
