@@ -9,111 +9,68 @@ Extension to Text2KGBench micro-ontologies :
 - WD / Shex
 Translation of Yago to SHACL.
 
+## CHECKLIST
 
-## Setup Environment
+- [x] YAGO Shacl translation + validation of every shape using SHACLplayground
+- [x] First draft Dbpedia Shacl annotation  based on Text2KGBench micro-ontologies
+- [ ] First draft Wikidata annotation  based on Text2KGBench micro-ontologies
+- [x] Developing scripts for DBpedia statistics needed for global settings
+- [x] Adapting the prompts to local/triples/global settings adapted to DBpedia/SHACL
+- [x] Generate prompt for Yago / SHACL 
+- [ ] Generate prompt for DBpedia / SHACL (triples no finished)
+- [x] Adapting generation for local / triple settings
+- [ ] Adapting generation for global setting
+- [ ] Adapting the evalution to SHACL
 
+## DBpedia endpoint
+The endpoint used here is [Corese](https://github.com/Wimmics/corese), a Software platform for the Semantic Web of Linked Data. 
+The software could be deployed locally via a  [JAR software](https://github.com/Wimmics/corese/releases/download/release-4.5.0/corese-server-4.5.0.jar) and the persistancy of the KB is allowed by the tdbloader of Jena (available in this directory).
+
+### Starting from scratch: Data base initialization
+1- First download CORESE jar file 
+2- Download the last version of [Jena](https://jena.apache.org/download/index.cgi) and locate the tdbloader script module
+3- Download the datadump gathering all the interesting data: [https://databus.dbpedia.org/](https://databus.dbpedia.org/)
+4- Load the data in CORESE using the **tdbloader** script as :
+```
+bash tdbloader --loc TDBLOADER_DIR FILES_DIR
+```
+4- configure the config.properties path in consequence
+
+5- run the Corese server via :
+```
+java -Xmx10g -jar corese-server-4.5.0.jar -init "config.properties"
+```
+6- The KB endpoint is now accesible via  'http://localhost:8080/sparql'
+
+## Prompt generation
+### YAGO SHACL
+#### local
 ```text
-conda create -n shapespresso python=3.11
-conda activate shapespresso
-pip install -r requirements.txt
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/local/yago/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/yago/Scientist.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json
 ```
 
-**Note:** It is recommended to have a locally running or stable endpoint to avoid potential timeout errors.
-If you do not have one, you can set it up easily using [qEndpoint](https://github.com/the-qa-company/qEndpoint).
-
-**Setting up Wikidata Endpoint**
+#### global
 ```text
-docker run -p 1234:1234 --name qendpoint-wikidata qacompany/qendpoint-wikidata
-```
-**Setting up YAGO Endpoint**
-```text
-docker run -p 1234:1234 --name qendpoint-yago qacompany/qendpoint
-```
-After setting up the YAGO endpoint, upload the YAGO 4.5 triples from [here](https://yago-knowledge.org/downloads/yago-4-5).
-
-The endpoint URL will then be accessible at: [`http://localhost:1234/api/endpoint/sparql`](http://localhost:1234/api/endpoint/sparql).
-
-## Running Experiments
-
-**Example 1: Generate Prompts (Local Setting, WES Dataset)**
-```text
-python main.py --task prompt \
-               --dataset wes \
-               --output_dir output/prompts/local/wes/entity_id/5 \
-               --mode local \
-               --num_instances 5 \
-               --sort_by entity_id \
-               --few_shot \
-               --few_shot_example_path dataset/wes/Q4220917.shex \
-               --save_log
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/global/yago/entity_id/5 --mode global --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path resources/yagos_global_few_shot_examples.toml --save_log --graph_info_path resources/yagos_predicate_count_instances.json
 ```
 
-**Example 2: Generate Schema (Global Setting, YAGOS Dataset)**
+#### triples
 ```text
-python main.py --task generate \
-               --model_name gpt-4o-mini \
-               --dataset wes \
-               --mode local \
-               --output_dir output/prompts/local/gpt-4o-mini/wes/entity_id/5 \
-               --prompts_dir output/prompts/local/wes/entity_id/5 \
-               --num_instances 5 \
-               --sort_by entity_id \
-               --few_shot \
-               --few_shot_example_path resources/wes_global_few_shot_examples.toml \
-               --graph_info_path resources/wikidata_property_information.json \
-               --save_log
+python main.py--task prompt --dataset yagos --output_dir output/prompts/shacl/triples/yago/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by entity_id --few_shot --few_shot_example_path dataset/SHACL/yago/Airline.ttl --save_log --endpoint_url "http://localhost:1234/api/endpoint/sparql" --graph_info_path resources/yagos_predicate_count_instances.json
 ```
 
-**Example 3: Evaluate (Classification Metrics, Exact Matching)**
+### DBPedia SHACL
+#### local
 ```text
-python evaluate.py --dataset wes \
-                   --ground_truth_dir dataset/wes \
-                   --predictions_dir output/results/local/gpt-4o-mini/wes/entity_id/5 \
-                   --node_constraint_matching_level exact \
-                   --cardinality_matching_level exact \
-                   --classification
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/local/dbpedia/entity_id/5 --mode local --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json
 ```
 
-**Example 4: Evaluate (Similarity Metrics)**
+#### global
 ```text
-python evaluate.py --dataset wes \
-                   --ground_truth_dir dataset/wes \
-                   --predictions_dir output/results/local/gpt-4o-mini/wes/entity_id/5 \
-                   --similarity
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/global/dbpedia/entity_id/5 --mode global --syntax SHACL --num_instances 1 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-0/AirportShapeTXT2KG_clean.ttl --save_log --endpoint_url "http://localhost:8080/sparql"
+```
+#### triples
+```text
+python main.py--task prompt --dataset dbpedia --output_dir output/prompts/shacl/triples/dbpedia/entity_id/5 --mode triples --syntax SHACL --num_instances 5 --sort_by predicate_count --few_shot --few_shot_example_path dataset/SHACL/dbpedia-1/Scientist.ttl --save_log --endpoint_url "http://localhost:8080/sparql" --graph_info_path resources/dbpedia_predicate_count_instances.json
 ```
 
-## Resources
-
-List of few-shot example files and graph information files:
-
-| `mode`  | `dataset` |            `few_shot_example_path`            |               `graph_info_path`                |
-|:-------:|:---------:|:---------------------------------------------:|:----------------------------------------------:|
-|  local  |    WES    |           dataset/wes/Q4220917.shex           |  resources/wes_predicate_count_instances.json  |
-|  local  |   YAGOS   |         dataset/yagos/Scientist.shex          | resources/yagos_predicate_count_instances.json |
-| global  |    WES    |  resources/wes_global_few_shot_examples.toml  |  resources/wikidata_property_information.json  |
-| global  |   YAGOS   | resources/yagos_global_few_shot_examples.toml |                       /                        |
-| triples |    WES    |           dataset/wes/Q4220917.shex           |  resources/wes_predicate_count_instances.json  |
-| triples |   YAGOS   |         dataset/yagos/Scientist.shex          | resources/yagos_predicate_count_instances.json |
-
-## Dataset
-
-The dataset can be accessed from [Zenodo](https://doi.org/10.5281/zenodo.17128093) and the `dataset` folder in this repository.
-
-## Citation
-
-If you find this repository useful, please cite our paper:
-```text
-@misc{zhang-et-al-2025,
-    title={{Schema Generation for Large Knowledge Graphs Using Large Language Models}}, 
-    author={Bohui Zhang and Yuan He and Lydia Pintscher and Albert Meroño Peñuela and Elena Simperl},
-    year={2025},
-    eprint={2506.04512},
-    archivePrefix={arXiv},
-    primaryClass={cs.AI},
-    url={https://arxiv.org/abs/2506.04512}, 
-}
-```
-
-## Contact
-
-For questions, reach out to `bohui.zhang@kcl.ac.uk`.
