@@ -6,7 +6,6 @@ from anthropic import Anthropic
 from openai import OpenAI
 from ollama import chat
 
-
 class BaseModel:
     def __init__(self):
         pass

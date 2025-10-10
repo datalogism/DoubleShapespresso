@@ -1,0 +1,21 @@
+class_uri,class_label,dataset,count
+http://dbpedia.org/ontology/Airport,airport,dbpedia,18972
+http://dbpedia.org/ontology/Artist,artist,dbpedia,107644
+http://dbpedia.org/ontology/Astronaut,astronaut,dbpedia,738
+http://dbpedia.org/ontology/Athlete,athlete,dbpedia,578933
+http://dbpedia.org/ontology/Building,building,dbpedia,165493
+http://dbpedia.org/ontology/CelestialBody,celestial body,dbpedia,12184
+http://dbpedia.org/ontology/City,city,dbpedia,38263
+http://dbpedia.org/ontology/ComicsCharacter,comics character,dbpedia,5205
+http://dbpedia.org/ontology/Company,company,dbpedia,150456
+http://dbpedia.org/ontology/Film,movie,dbpedia,176722
+http://dbpedia.org/ontology/Food,Food,dbpedia,13168
+http://dbpedia.org/ontology/MeanOfTransportation,mean of transportation,dbpedia,75289
+http://dbpedia.org/ontology/Monument,monument,dbpedia,1850
+http://dbpedia.org/ontology/MusicalWork,musical work,dbpedia,249146
+http://dbpedia.org/ontology/Politician,politician,dbpedia,200848
+http://dbpedia.org/ontology/Scientist,scientist,dbpedia,52119
+http://dbpedia.org/ontology/SportsTeam,sports team,dbpedia,28142
+http://dbpedia.org/ontology/University,university,dbpedia,45911
+http://dbpedia.org/ontology/WrittenWork,written work,dbpedia,90780
+http://dbpedia.org/ontology/Person,person,dbpedia,2293327

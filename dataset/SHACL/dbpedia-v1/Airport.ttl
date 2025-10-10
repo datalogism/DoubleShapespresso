@@ -1,0 +1,183 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/AirportShape> a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/buildingEndDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Station> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/routeStart> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ],
+        [ sh:class <http://dbpedia.org/ontology/City> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/city> ],
+        [ sh:class <http://dbpedia.org/ontology/PersonFunction> ;
+            sh:path <http://dbpedia.org/ontology/politicalLeader> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/runwaySurface> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaLand> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/commander> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/yearOfConstruction> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/elevation> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/runwayLength> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaTotal> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#long> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/originalName> ],
+        [ sh:class <http://dbpedia.org/ontology/Station> ;
+            sh:maxCount 5 ;
+            sh:path <http://dbpedia.org/ontology/routeEnd> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/routeEndDirection> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/owner> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/district> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/faaLocationIdentifier> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingDate> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/agencyStationCode> ],
+        [ sh:class <http://dbpedia.org/datatype/kilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Infrastructure/length> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/routeStartDirection> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/timeZone> ],
+        [ sh:path <http://dbpedia.org/ontology/subdivision> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/iataLocationIdentifier> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/builder> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/areaTotal> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/routeTypeAbbreviation> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:class <http://dbpedia.org/ontology/Station> ;
+            sh:path <http://dbpedia.org/ontology/routeJunction> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:path <http://dbpedia.org/ontology/locatedInArea> ],
+        [ sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/runwayDesignation> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/openingYear> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/area> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/utcOffset> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/location> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationTotal> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/routeNumber> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/principalArea> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/nrhpReferenceNumber> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/operator> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/gridReference> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/ceremonialCounty> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/openingDate> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingYear> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/icaoLocationIdentifier> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/locationIdentifier> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaCode> ],
+        [ sh:path <http://www.georss.org/georss/point> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/postalCode> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/nearestCity> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/Airport> .
+

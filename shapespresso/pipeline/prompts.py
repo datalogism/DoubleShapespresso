@@ -1,7 +1,7 @@
 import json
 import random
 import tomllib
-
+import sys
 from loguru import logger
 from collections import defaultdict
 from pathlib import Path
@@ -15,7 +15,23 @@ from shapespresso.pipeline import (
     query_instances_predicate_count
 )
 from shapespresso.utils import endpoint_sparql_query
+import re
+import json
 
+prefix_map = json.loads(Path("resources/prefix_map.json").read_text())
+print(prefix_map)
+def prefix_replace(data):
+    print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    str_data=str(data)
+    if("<" in str_data):
+        for url in prefix_map.keys():
+            prefix=prefix_map[url]
+            str_data = str_data.replace("<"+url,prefix+":")
+        str_data = str_data.replace(">","")
+    for url in prefix_map.keys():
+        prefix=prefix_map[url]
+        str_data = str_data.replace(url,prefix+":")
+    return str_data
 
 def query_local_information(
         dataset: str,
@@ -41,12 +57,16 @@ def query_local_information(
     Returns:
         instance_triples (list[str]): triples of instances retrieved
     """
+    print("HHKKKK")
     if sort_by == 'predicate_count':
+        print("IN")
         # query for entities with the highest number of distinct properties
         if dataset == "wes" and graph_info_path:
+            print("IN0")
             logger.info("Load 'predicate_count' sorted entities")
             instances = json.loads(Path(graph_info_path).read_text())[class_uri][:num_instances]
         else:
+            print("IN1")
             instances = query_instances_predicate_count(
                 class_uri=class_uri,
                 dataset=dataset,
@@ -56,6 +76,7 @@ def query_local_information(
             )
         instance_uris = [result["subject"] for result in instances]
     else:
+
         query = f"""
                 SELECT ?subject
                 WHERE {{
@@ -71,6 +92,7 @@ def query_local_information(
         else:
             instance_uris = random.sample(instances, num_instances)
 
+    print("HEY")
     instance_triples = list()
     for instance_uri in instance_uris:
         if dataset == "wes":
@@ -107,7 +129,7 @@ def query_local_information(
                     }}"""
             results = endpoint_sparql_query(query, endpoint_url)
             instance_triples.extend(concat_object_values(results, True))
-        else:
+        elif dataset == "yagos":
             query = f"""
                     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                     
@@ -130,6 +152,52 @@ def query_local_information(
                       }}
                     }}
                     """
+            results = endpoint_sparql_query(query, endpoint_url)
+            instance_triples.extend(concat_object_values(results, True))
+        elif dataset == "dbpedia":
+            query = f"""
+                               PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+                               SELECT DISTINCT ?subject ?subjectLabel ?predicate ?propertyLabel ?object ?objectLabel ?datatype
+                               WHERE {{
+                                 BIND (<{instance_uri}> AS ?subject)
+                                 ?subject ?predicate ?object .
+                                 FILTER (!regex(?predicate, "http://dbpedia.org/property/.*")).
+                            FILTER (?predicate NOT IN(<http://dbpedia.org/ontology/abstract>,
+                            <http://dbpedia.org/ontology/thumbnail>,
+                            <http://dbpedia.org/ontology/wikiPageExternalLink>,
+                            <http://dbpedia.org/ontology/wikiPageID>,
+                            <http://dbpedia.org/ontology/wikiPageLength>,
+                            <http://dbpedia.org/ontology/wikiPageRevisionID>,
+                            <http://dbpedia.org/ontology/wikiPageWikiLink>,
+                            <http://purl.org/dc/terms/subject>,
+                            <http://purl.org/linguistics/gold/hypernym>,
+                            <http://www.w3.org/2000/01/rdf-schema#comment>,
+                            <http://www.w3.org/2000/01/rdf-schema#label>,
+                            <http://www.w3.org/2002/07/owl#sameAs>,
+                            <http://www.w3.org/ns/prov#wasDerivedFrom>,
+                            <http://xmlns.com/foaf/0.1/depiction>,
+                            <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>,
+                            <http://www.w3.org/2000/01/rdf-schema#seeAlso>,
+                            <http://www.w3.org/2002/07/owl#differentFrom>,
+                            <http://dbpedia.org/ontology/wikiPageInterLanguageLink>,
+                            <http://dbpedia.org/ontology/wikiPageRedirects>,
+                            <http://schema.org/sameAs>)).
+                                 BIND (datatype(?object) AS ?datatype)
+                                 OPTIONAL {{
+                                   ?subject rdfs:label ?subjectLabel .
+                                   FILTER (LANG(?subjectLabel) = "en")
+                                 }}
+                                 OPTIONAL {{
+                                   ?predicate rdfs:label ?propertyLabel .
+                                   FILTER (LANG(?propertyLabel) = "en")
+                                 }}
+                                 OPTIONAL {{
+                                   ?object rdfs:label ?objectLabel .
+                                   FILTER (LANG(?objectLabel) = "en")
+                                 }}
+                               }}
+                               """
             results = endpoint_sparql_query(query, endpoint_url)
             instance_triples.extend(concat_object_values(results, True))
 
@@ -200,6 +268,7 @@ def load_few_shot_prompt(
         dataset: str,
         mode: str,
         instance_of_uri: str,
+        syntax: str,
         endpoint_url: str,
         few_shot_example_path: str,
         num_instances: int = 3,
@@ -238,11 +307,18 @@ def load_few_shot_prompt(
     elif dataset == "yagos":
         class_uri = "http://yago-knowledge.org/resource/Scientist"
         class_label = "scientist"
+    elif dataset == "dbpedia":
+        class_uri = "http://dbpedia.org/ontology/Scientist"
+        class_label = "scientist"
     else:
         raise NotImplementedError(f"Unknown dataset '{dataset}'")
 
     if mode == "local":
-        few_shot_shex_example = Path(few_shot_example_path).read_text()
+        #few_shot_shex_example = Path(few_shot_example_path).read_text()
+        ############ @Celian I added it to delete the comments
+        f = open(Path(few_shot_example_path), 'r')
+        few_shot_shex_example= re.sub(' +', ' '," ".join([n for n in  f.readlines() if not '#' in n]).replace("\n",""))
+        print("HHHHHHHHH")
         few_shot_instance_examples = query_local_information(
             dataset=dataset,
             class_uri=class_uri,
@@ -252,32 +328,60 @@ def load_few_shot_prompt(
             sort_by=sort_by,
             graph_info_path=graph_info_path
         )
-        few_shot_prompts.extend([
-            {
-                "role": "user",
-                "content": (
-                    f"Based on the information, generate the ShEx schema for the class '{class_uri} "
-                    f"({class_label})'. The provided JSON contains example instances of this class "
-                    f"with the following fields: 'subject' (label), 'predicate' (label), 'object' "
-                    f"(label), and 'datatype'.\n"
-                    f"Example instances:\n{few_shot_instance_examples}\n"
-                ),
-            },
-            {
-                "role": "assistant",
-                "content": few_shot_shex_example
-            },
-        ])
+        few_shot_instance_examples=prefix_replace(few_shot_instance_examples)
 
+        if(syntax=="ShEx"):
+            few_shot_prompts.extend([
+                {
+                    "role": "user",
+                    "content": (
+                        f"Based on the information, generate the ShEx schema for the class '{class_uri} "
+                        f"({class_label})'. The provided JSON contains example instances of this class "
+                        f"with the following fields: 'subject' (label), 'predicate' (label), 'object' "
+                        f"(label), and 'datatype'.\n"
+                        f"Example instances:\n{few_shot_instance_examples}\n"
+                    ),
+                },
+                {
+                    "role": "assistant",
+                    "content": few_shot_shex_example
+                },
+            ])
+
+        elif (syntax == "SHACL"):
+            few_shot_prompts.extend([
+                {
+                    "role": "user",
+                    "content": (
+                        f"Based on the information, generate the SHACL schema for the class '{class_uri} "
+                        f"({class_label})'. The provided JSON contains example instances of this class "
+                        f"with the following fields: 'subject' (label), 'predicate' (label), 'object' "
+                        f"(label), and 'datatype'.\n"
+                        f"Example instances:\n{few_shot_instance_examples}\n"
+                    ),
+                },
+                {
+                    "role": "assistant",
+                    "content": few_shot_shex_example
+                },
+            ])
     elif mode == "global":
+        print(few_shot_example_path)
+        print(Path(few_shot_example_path).read_text())
         few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+
         for i in range(len(few_shot_examples) // 2):
             example = json.dumps(few_shot_examples[f"example_{i}"], ensure_ascii=False, indent=2)
+
             if information_types:
                 example = {key: value for key, value in example if key in information_types}
-            answer = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
+            if (syntax == "ShEx"):
+                answer = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
+            elif (syntax == "SHACL"):
+                answer = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
             if answer_keys:
                 answer = {key: value for key, value in answer if key in answer_keys}
+
             few_shot_prompts.extend([
                 {
                     "role": "user",
@@ -312,23 +416,45 @@ def load_few_shot_prompt(
                 )
             )
 
-        few_shot_prompts.extend([
-            {
-                "role": "user",
-                "content": (
-                    f"Generate a ShEx schema for the class '{class_uri} ({class_label})' using the "
-                    f"provided information. The input JSON contains example triples of instances of "
-                    f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
-                    f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
-                    f"is represented across {num_instances} instances.\n"
-                    f"Example triples of instances:\n{few_shot_triple_examples}\n"
-                )
-            },
-            {
-                "role": "assistant",
-                "content": few_shot_shex_example
-            },
-        ])
+        few_shot_triple_examples=prefix_replace(few_shot_triple_examples)
+        if(syntax=="ShEx"):
+
+            few_shot_prompts.extend([
+                {
+                    "role": "user",
+                    "content": (
+                        f"Generate a ShEx schema for the class '{class_uri} ({class_label})' using the "
+                        f"provided information. The input JSON contains example triples of instances of "
+                        f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
+                        f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
+                        f"is represented across {num_instances} instances.\n"
+                        f"Example triples of instances:\n{few_shot_triple_examples}\n"
+                    )
+                },
+                {
+                    "role": "assistant",
+                    "content": few_shot_shex_example
+                },
+            ])
+
+        elif (syntax == "SHACL"):
+            few_shot_prompts.extend([
+                {
+                    "role": "user",
+                    "content": (
+                        f"Generate a SHACL schema for the class '{class_uri} ({class_label})' using the "
+                        f"provided information. The input JSON contains example triples of instances of "
+                        f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
+                        f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
+                        f"is represented across {num_instances} instances.\n"
+                        f"Example triples of instances:\n{few_shot_triple_examples}\n"
+                    )
+                },
+                {
+                    "role": "assistant",
+                    "content": few_shot_shex_example
+                },
+            ])
     else:
         raise NotImplementedError(f"Mode {mode} not implemented")
 
@@ -340,6 +466,7 @@ def construct_cardinality_prompt(
         class_label: str,
         predicate_uri: str,
         dataset: str,
+        syntax: str,
         instance_of_uri: str,
         endpoint_url: str,
         few_shot: bool = True,
@@ -365,15 +492,27 @@ def construct_cardinality_prompt(
     Returns:
         prompt (list[dict]): list of prompts
     """
-    system_content = (
-        "You are a knowledge engineer with expertise in writing Shape Expressions (ShEx) for knowledge graphs. "
-        "Follow the workflow below to generate property constraints. Start by determining the cardinality of "
-        "the property, which consists of a minimum and a maximum value: If the property is optional, set the "
-        "minimum value to 0. The maximum can be left open (unbounded, i.e., -1) unless there's a clear upper "
-        "limit (which is rare). If the property is essential, set the minimum value to 1. The maximum can "
-        "still be unbounded unless it should be limited (e.g., 1 for a single-value property). If the property "
-        "is not applicable to the class, set both minimum and maximum to 0."
-    )
+    if(syntax=="ShEx"):
+        system_content = (
+            "You are a knowledge engineer with expertise in writing Shape Expressions (ShEx) for knowledge graphs. "
+            "Follow the workflow below to generate property constraints. Start by determining the cardinality of "
+            "the property, which consists of a minimum and a maximum value: If the property is optional, set the "
+            "minimum value to 0. The maximum can be left open (unbounded, i.e., -1) unless there's a clear upper "
+            "limit (which is rare). If the property is essential, set the minimum value to 1. The maximum can "
+            "still be unbounded unless it should be limited (e.g., 1 for a single-value property). If the property "
+            "is not applicable to the class, set both minimum and maximum to 0."
+        )
+    elif(syntax=="SHACL"):
+        system_content = (
+            "You are a knowledge engineer with expertise in writing SHACL shape for knowledge graphs. "
+            "Follow the workflow below to generate property constraints. Start by determining the cardinality of "
+            "the property, which consists of a minimum and a maximum value: If the property is optional, set the "
+            "minimum value to 0. The maximum can be left open (unbounded, i.e., -1) unless there's a clear upper "
+            "limit (which is rare). If the property is essential, set the minimum value to 1. The maximum can "
+            "still be unbounded unless it should be limited (e.g., 1 for a single-value property). If the property "
+            "is not applicable to the class, set both minimum and maximum to 0."
+        )
+
     few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
     prompt = [
         {
@@ -390,11 +529,18 @@ def construct_cardinality_prompt(
                 "frequency", "cardinality_distribution", "triple_examples"
             ]
             predicate_info = {key: value for key, value in predicate_info.items() if key in information_types}
-            shexj_json = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
-            cardinality = {
-                "min": shexj_json.get("triple_constraint", {"min": 0}).get("min", 1),
-                "max": shexj_json.get("triple_constraint", {"max": 0}).get("max", 1),
-            }
+            if(syntax=="ShEx"):
+                shexj_json = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
+                cardinality = {
+                    "min": shexj_json.get("triple_constraint", {"min": 0}).get("min", 1),
+                    "max": shexj_json.get("triple_constraint", {"max": 0}).get("max", 1),
+                }
+            elif(syntax=="SHACL"):
+                shaclj_json = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
+                cardinality = {
+                    "min": shaclj_json["sh:minCount"],
+                    "max": shaclj_json["sh:maxCount"],
+                }
             prompt.extend([
                 {
                     "role": "user",
@@ -443,6 +589,7 @@ def construct_node_constraint_prompt(
         class_label: str,
         predicate_uri: str,
         dataset: str,
+        syntax: str,
         instance_of_uri: str,
         endpoint_url: str,
         few_shot: bool = True,
@@ -470,16 +617,28 @@ def construct_node_constraint_prompt(
     Returns:
         prompt (list[dict]): list of prompts
     """
-    system_content = (
-        "You are a knowledge engineer specializing in writing ShEx (Shape Expressions) schemas. "
-        "Given property information for a specific class, your task is to generate a node constraint only. "
-        "There are three types of responses you may produce:\n"
-        "1. Value Shape constraint (most common): Specify that the object/value must belong to a "
-        "particular class or a list of classes.\n"
-        "2. Value constraint: Restrict the value to a specific set of items.\n"
-        "3. Node Kind (IRI): Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
-        "Focus solely on generating the appropriate node constraint for the provided property."
-    )
+    if(syntax=="ShEx"):
+        system_content = (
+            "You are a knowledge engineer specializing in writing ShEx (Shape Expressions) schemas. "
+            "Given property information for a specific class, your task is to generate a node constraint only. "
+            "There are three types of responses you may produce:\n"
+            "1. Value Shape constraint (most common): Specify that the object/value must belong to a "
+            "particular class or a list of classes.\n"
+            "2. Value constraint: Restrict the value to a specific set of items.\n"
+            "3. Node Kind (IRI): Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
+            "Focus solely on generating the appropriate node constraint for the provided property."
+        )
+    elif(syntax=="SHACL"):
+        system_content = (
+            "You are a knowledge engineer specializing in writing SHACL shape. "
+            "Given property information for a specific class, your task is to generate a node constraint only. "
+            "There are three types of responses you may produce:\n"
+            "1. Value Shape constraint (most common): Specify that the object/value must belong to a "
+            "particular class or a list of classes.\n"
+            "2. Value constraint: Restrict the value to a specific set of items.\n"
+            "3. Node Kind (IRI): Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
+            "Focus solely on generating the appropriate node constraint for the provided property."
+        )
     few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
     prompt = [
         {
@@ -569,6 +728,7 @@ def construct_prompt(
         class_label: str,
         instance_of_uri: str,
         dataset: str,
+        syntax: str,
         endpoint_url: str,
         mode: str,
         few_shot: bool = True,
@@ -616,6 +776,7 @@ def construct_prompt(
         f"class_label={class_label}, "
         f"instance_of_uri={instance_of_uri}, "
         f"dataset={dataset}, "
+        f"syntax={syntax}, "
         f"endpoint_url={endpoint_url}, "
         f"mode={mode}, "
         f"few_shot={few_shot}, "
@@ -631,21 +792,39 @@ def construct_prompt(
     )
 
     if mode == "local" or mode == "triples":
-        system_content = (
-            "You are a skilled knowledge engineer with deep expertise in writing ShEx (Shape "
-            "Expressions) schemas. Carefully analyze the provided few-shot examples to "
-            "understand the end-to-end generation process. Generate precise, well-structured "
-            "ShEx scripts based on given example items and their related triples."
-        )
+        if(syntax=="ShEx"):
+            system_content = (
+                "You are a skilled knowledge engineer with deep expertise in writing ShEx (Shape "
+                "Expressions) schemas. Carefully analyze the provided few-shot examples to "
+                "understand the end-to-end generation process. Generate precise, well-structured "
+                "ShEx scripts based on given example items and their related triples."
+            )
+        elif(syntax=="SHACL"):
+            system_content = (
+                "You are a skilled knowledge engineer with deep expertise in writing SHACL (Shapes"
+                " Constraint Language) constraints. Carefully analyze the provided few-shot examples to "
+                "understand the end-to-end generation process. Generate precise, well-structured "
+                "SHACL constraints based on given example items and their related triples."
+            )
     elif mode == "global":
-        system_content = (
-            "You are a knowledge engineer specializing in ShEx (Shape Expressions) schemas. "
-            "Based on the provided property information for a given class, your task is to "
-            "generate property constraints in JSON format. Each constraint should include "
-            "details such as the predicate, node constraints, cardinality, and other relevant "
-            "specifications. When object ranges require more precise definitions across a "
-            "list of classes, generate value shapes rather than relying solely on `nodeKind`."
-        )
+        if (syntax == "ShEx"):
+            system_content = (
+                "You are a knowledge engineer specializing in ShEx (Shape Expressions) schemas. "
+                "Based on the provided property information for a given class, your task is to "
+                "generate property constraints in JSON format. Each constraint should include "
+                "details such as the predicate, node constraints, cardinality, and other relevant "
+                "specifications. When object ranges require more precise definitions across a "
+                "list of classes, generate value shapes rather than relying solely on `nodeKind`."
+            )
+        elif(syntax=="SHACL"):
+            system_content = (
+                "You are a knowledge engineer specializing in SHACL (Shapes Constraint Language) schemas. "
+                "Based on the provided property information for a given class, your task is to "
+                "generate property constraints in JSON format. Each constraint should include "
+                "details such as the predicate, node constraints, cardinality, and other relevant "
+                "specifications. When object ranges require more precise definitions across a "
+                "list of classes, generate value shapes rather than relying solely on `nodeKind`."
+            )
     else:
         raise NotImplementedError(f"Mode {mode} not implemented")
 
@@ -664,6 +843,7 @@ def construct_prompt(
                 few_shot_prompt = load_few_shot_prompt(
                     dataset=dataset,
                     mode=mode,
+                    syntax=syntax,
                     instance_of_uri=instance_of_uri,
                     endpoint_url=endpoint_url,
                     few_shot_example_path=few_shot_example_path,
@@ -682,15 +862,29 @@ def construct_prompt(
                 sort_by=sort_by,
                 graph_info_path=graph_info_path
             )
-            local_prompt = [{
-                "role": "user",
-                "content": (
-                    f"Based on the information, generate the ShEx schema for the class '{class_uri} ({class_label})'. "
-                    f"The provided JSON contains example instances of this class with the following fields: "
-                    f"'subject' (label), 'predicate' (label), 'object' (label), and 'datatype'.\n"
-                    f"Example instances:\n{instance_examples}\n"
-                )
-            }]
+
+            instance_examples = prefix_replace(instance_examples)
+
+            if (syntax == "ShEx"):
+                local_prompt = [{
+                    "role": "user",
+                    "content": (
+                        f"Based on the information, generate the ShEx schema for the class '{class_uri} ({class_label})'. "
+                        f"The provided JSON contains example instances of this class with the following fields: "
+                        f"'subject' (label), 'predicate' (label), 'object' (label), and 'datatype'.\n"
+                        f"Example instances:\n{instance_examples}\n"
+                    )
+                }]
+            else:
+                local_prompt = [{
+                    "role": "user",
+                    "content": (
+                        f"Based on the information, generate the SHACL shape for the class '{class_uri} ({class_label})'. "
+                        f"The provided JSON contains example instances of this class with the following fields: "
+                        f"'subject' (label), 'predicate' (label), 'object' (label), and 'datatype'.\n"
+                        f"Example instances:\n{instance_examples}\n"
+                    )
+                }]
             prompt.extend(local_prompt)
 
         if save_prompt_path:
@@ -706,6 +900,7 @@ def construct_prompt(
             few_shot_prompt = load_few_shot_prompt(
                 dataset=dataset,
                 mode=mode,
+                syntax=syntax,
                 instance_of_uri=instance_of_uri,
                 endpoint_url=endpoint_url,
                 few_shot_example_path=few_shot_example_path,
@@ -764,6 +959,7 @@ def construct_prompt(
                 few_shot_prompt = load_few_shot_prompt(
                     dataset=dataset,
                     mode=mode,
+                    syntax=syntax,
                     instance_of_uri=instance_of_uri,
                     endpoint_url=endpoint_url,
                     few_shot_example_path=few_shot_example_path,
@@ -793,17 +989,31 @@ def construct_prompt(
                     )
                 )
 
-            triple_prompt = [{
-                "role": "user",
-                "content": (
-                    f"Generate a ShEx schema for the class '{class_uri} ({class_label})' using the "
-                    f"provided information. The input JSON contains example triples of instances of "
-                    f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
-                    f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
-                    f"is represented across {num_instances} instances.\n"
-                    f"Example triples of instances:\n{triple_examples}\n"
-                )
-            }]
+            triple_examples = prefix_replace(triple_examples)
+            if (syntax == "ShEx"):
+                triple_prompt = [{
+                    "role": "user",
+                    "content": (
+                        f"Generate a ShEx schema for the class '{class_uri} ({class_label})' using the "
+                        f"provided information. The input JSON contains example triples of instances of "
+                        f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
+                        f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
+                        f"is represented across {num_instances} instances.\n"
+                        f"Example triples of instances:\n{triple_examples}\n"
+                    )
+                }]
+            else:
+                triple_prompt = [{
+                    "role": "user",
+                    "content": (
+                        f"Generate a SHACL shape for the class '{class_uri} ({class_label})' using the "
+                        f"provided information. The input JSON contains example triples of instances of "
+                        f"this class, with the following fields: 'subject' (label), 'predicate' (label), "
+                        f"'object' (label), and 'datatype'. Each predicate used by instances of this class "
+                        f"is represented across {num_instances} instances.\n"
+                        f"Example triples of instances:\n{triple_examples}\n"
+                    )
+                }]
             prompt.extend(triple_prompt)
 
             if save_prompt_path:

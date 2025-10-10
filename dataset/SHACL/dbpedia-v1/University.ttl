@@ -1,0 +1,213 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/UniversityShape> a sh:NodeShape ;
+    sh:property [ sh:class <http://dbpedia.org/ontology/Language> ;
+            sh:path <http://dbpedia.org/ontology/language> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/formerName> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/lowerAge> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/address> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/president> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.georss.org/georss/point> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfStudents> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfGraduateStudents> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingYear> ],
+        [ sh:path <http://dbpedia.org/ontology/campus> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/grades> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/closingYear> ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/ranking> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/membership> ],
+        [ sh:class <http://dbpedia.org/ontology/Image> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/thumbnail> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path foaf:depiction ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/state> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:path <http://dbpedia.org/ontology/parentOrganisation> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/purpose> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:path foaf:nick ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/principal> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/keyPerson> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/rector> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfUndergraduateStudents> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfDoctoralStudents> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/formationYear> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/endowment> ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/barPassRate> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/leader> ],
+        [ sh:path <http://dbpedia.org/ontology/religion> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/headquarter> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/viceChancellor> ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/affiliation> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/patronSaint> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/chancellor> ],
+        [ sh:class <http://dbpedia.org/ontology/PersonFunction> ;
+            sh:path <http://dbpedia.org/ontology/leaderFunction> ],
+        [ sh:class <http://dbpedia.org/ontology/School> ;
+            sh:path <http://dbpedia.org/ontology/highschool> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/status> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/foundedBy> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/staff> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/postalCode> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfPostgraduateStudents> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfEmployees> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/facultySize> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingDate> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/upperAge> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/location> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/dean> ],
+        [ sh:class <http://dbpedia.org/ontology/City> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/city> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/motto> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/head> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abbreviation> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/provost> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/director> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/originalName> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/chairman> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/namedAfter> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/mascot> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/county> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#long> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/officialSchoolColour> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/University> .
+

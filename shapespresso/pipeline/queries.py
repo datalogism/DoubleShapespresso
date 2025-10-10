@@ -192,7 +192,37 @@ def query_property_list(
                 }}
                 """
         property_list = endpoint_sparql_query(query, endpoint_url)
-
+    elif dataset == "dbpedia":
+        query = f"""
+                  SELECT DISTINCT ?predicate
+                  WHERE {{
+                    ?subject <{instance_of_uri}> <{class_uri}> ;
+                             ?predicate ?object .
+                             FILTER (!regex(?predicate, "http://dbpedia.org/property/.*")).
+                            FILTER (?predicate NOT IN(<http://dbpedia.org/ontology/abstract>,
+                            <http://dbpedia.org/ontology/thumbnail>,
+                            <http://dbpedia.org/ontology/wikiPageExternalLink>,
+                            <http://dbpedia.org/ontology/rdf>,
+                            <http://dbpedia.org/ontology/wikiPageID>,
+                            <http://dbpedia.org/ontology/wikiPageLength>,
+                            <http://dbpedia.org/ontology/wikiPageRevisionID>,
+                            <http://dbpedia.org/ontology/wikiPageWikiLink>,
+                            <http://purl.org/dc/terms/subject>,
+                            <http://purl.org/linguistics/gold/hypernym>,
+                            <http://www.w3.org/2000/01/rdf-schema#comment>,
+                            <http://www.w3.org/2000/01/rdf-schema#label>,
+                            <http://www.w3.org/2002/07/owl#sameAs>,
+                            <http://www.w3.org/ns/prov#wasDerivedFrom>,
+                            <http://xmlns.com/foaf/0.1/depiction>,
+                            <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>,
+                            <http://www.w3.org/2000/01/rdf-schema#seeAlso>,
+                            <http://www.w3.org/2002/07/owl#differentFrom>,
+                            <http://dbpedia.org/ontology/wikiPageInterLanguageLink>,
+                            <http://dbpedia.org/ontology/wikiPageRedirects>,
+                            <http://schema.org/sameAs>)).
+                  }}
+                  """
+        property_list = endpoint_sparql_query(query, endpoint_url)
     else:
         raise NotImplementedError(f"Unknown dataset '{dataset}'!")
 
@@ -318,7 +348,7 @@ def query_instances_predicate_count(
                     """
             results = endpoint_sparql_query(query, endpoint_url)
             instances = heapq.nlargest(num_instances, instances + results, key=lambda x: int(x["count"]))
-    else:
+    elif dataset == "yagos":
         query = f"""
                 SELECT DISTINCT ?subject (COUNT(DISTINCT ?predicate) AS ?count)
                 WHERE {{
@@ -330,7 +360,41 @@ def query_instances_predicate_count(
                 """
         results = endpoint_sparql_query(query, endpoint_url)
         instances = results[:num_instances]
-
+    elif dataset == "dbpedia":
+        print("INYEAH")
+        query = f"""
+                SELECT DISTINCT ?subject (COUNT(DISTINCT ?predicate) AS ?count)
+                WHERE {{
+                  ?subject <{instance_of_uri}> <{class_uri}> ;
+                           ?predicate ?object .
+                            FILTER (!regex(?predicate, "http://dbpedia.org/property/.*")).
+                            FILTER (?predicate NOT IN(<http://dbpedia.org/ontology/abstract>,
+                            <http://dbpedia.org/ontology/thumbnail>,
+                            <http://dbpedia.org/ontology/wikiPageExternalLink>,
+                            <http://dbpedia.org/ontology/rdf>,
+                            <http://dbpedia.org/ontology/wikiPageID>,
+                            <http://dbpedia.org/ontology/wikiPageLength>,
+                            <http://dbpedia.org/ontology/wikiPageRevisionID>,
+                            <http://dbpedia.org/ontology/wikiPageWikiLink>,
+                            <http://purl.org/dc/terms/subject>,
+                            <http://purl.org/linguistics/gold/hypernym>,
+                            <http://www.w3.org/2000/01/rdf-schema#comment>,
+                            <http://www.w3.org/2000/01/rdf-schema#label>,
+                            <http://www.w3.org/2002/07/owl#sameAs>,
+                            <http://www.w3.org/ns/prov#wasDerivedFrom>,
+                            <http://xmlns.com/foaf/0.1/depiction>,
+                            <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>,
+                            <http://www.w3.org/2000/01/rdf-schema#seeAlso>,
+                            <http://www.w3.org/2002/07/owl#differentFrom>,
+                            <http://dbpedia.org/ontology/wikiPageInterLanguageLink>,
+                            <http://dbpedia.org/ontology/wikiPageRedirects>,
+                            <http://schema.org/sameAs>)).
+                }}
+                GROUP BY ?subject
+                ORDER BY DESC(?count)
+                """
+        results = endpoint_sparql_query(query, endpoint_url)
+        instances = results[:num_instances]
     return instances
 
 
@@ -399,7 +463,8 @@ def query_triple_examples(
         results = endpoint_sparql_query(query, endpoint_url)
         instance_uris = [result["subject"] for result in results]
         instance_uris = sorted(instance_uris, key=lambda x: (len(x), x.lower()))[:num_instances]
-    elif dataset == "yagos":  # sort_by = 'predicate_count'
+    elif dataset in ["yagos","dbpedia"]:  # sort_by = 'predicate_count'
+        print("query_triple_examples")
         query = f"""
                 SELECT DISTINCT ?subject (COUNT(DISTINCT ?predicate) AS ?count)
                 WHERE {{
@@ -445,6 +510,8 @@ def query_triple_examples(
             results = endpoint_sparql_query(query, endpoint_url)
             triple_examples.extend(concat_object_values(results, True))
         elif dataset == "yagos":
+
+            print("query_triple_examples")
             query = f"""
                     SELECT DISTINCT ?subject ?subjectLabel ?predicate ?propertyLabel ?object ?objectLabel ?datatype
                     WHERE {{
@@ -466,6 +533,30 @@ def query_triple_examples(
                       }}
                     }}
                     """
+            results = endpoint_sparql_query(query, endpoint_url)
+            triple_examples.extend(concat_object_values(results, True))
+        elif dataset == "dbpedia":
+            query = f"""
+            SELECT DISTINCT ?subject ?subjectLabel ?predicate ?propertyLabel ?object ?objectLabel ?datatype
+            WHERE {{
+              BIND (<{instance_uri}> AS ?subject)
+              BIND (<{predicate_uri}> AS ?predicate)
+              ?subject ?predicate ?object .
+              BIND (datatype(?object) AS ?datatype)
+              OPTIONAL {{
+                ?subject <http://www.w3.org/2000/01/rdf-schema#label> ?subjectLabel .
+                FILTER (LANG(?subjectLabel) = "en")
+              }}
+              OPTIONAL {{
+                ?predicate <http://www.w3.org/2000/01/rdf-schema#label> ?propertyLabel .
+                FILTER (LANG(?propertyLabel) = "en")
+              }}
+              OPTIONAL {{
+                ?object <http://www.w3.org/2000/01/rdf-schema#label> ?objectLabel .
+                FILTER (LANG(?objectLabel) = "en")
+              }}
+            }}
+            """
             results = endpoint_sparql_query(query, endpoint_url)
             triple_examples.extend(concat_object_values(results, True))
         else:

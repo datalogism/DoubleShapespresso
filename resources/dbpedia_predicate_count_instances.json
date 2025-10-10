@@ -1,0 +1,1662 @@
+{
+    "http://dbpedia.org/ontology/Airport": [
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevel",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/2ndRunwaySurfaceType",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/division",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/order",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/cityServed",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/runwayName",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/3rdRunwaySurfaceType",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/city",
+            "count": "9463"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/transportAircraft",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/class",
+            "count": "3"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/leaderParty",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/runwayLength",
+            "count": "13696"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/location",
+            "count": "9436"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/owner",
+            "count": "2416"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/runwaySurfaceType",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevelInMetres",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/icaoLocationIdentifier",
+            "count": "10899"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/operatingOrganisation",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "7"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/1stRunwaySurfaceType",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/Artist": [
+        {
+            "subject": "http://dbpedia.org/ontology/activeYearsStartYear",
+            "count": "48981"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "5612"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "67494"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/instrument",
+            "count": "14735"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/professionalField",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/associatedBand/associatedMusicalArtist",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "20945"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/background",
+            "count": "19208"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/recordLabel",
+            "count": "25982"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevel",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "66518"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/training",
+            "count": "5312"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nationality",
+            "count": "10452"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathDate",
+            "count": "25376"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/occupation",
+            "count": "17711"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthYear",
+            "count": "3275"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/genre",
+            "count": "51230"
+        }
+    ],
+    "http://dbpedia.org/ontology/Astronaut": [
+        {
+            "subject": "http://dbpedia.org/ontology/operator",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nationality",
+            "count": "134"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/timeInSpace",
+            "count": "134"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/higher",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "674"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/servedAsChiefOfTheAstronautOfficeIn",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathDate",
+            "count": "163"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/gemstone",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/mission",
+            "count": "588"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/competeIn",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "658"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "137"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/award",
+            "count": "128"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/selectedByNasa",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/crewMembers",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/almaMater",
+            "count": "313"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/backupPilot",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/awards",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/partsType",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/part",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/senators",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/ribbonAward",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/occupation",
+            "count": "582"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/dateOfRetirement",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/status",
+            "count": "410"
+        }
+    ],
+    "http://dbpedia.org/ontology/Athlete": [
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "55541"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/league",
+            "count": "15915"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "452728"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/timeZone",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/coach",
+            "count": "2234"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/draftRound",
+            "count": "19496"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/club",
+            "count": "8241"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/debutTeam",
+            "count": "24741"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/height",
+            "count": "245902"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/draftPick",
+            "count": "22128"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/draftYear",
+            "count": "33973"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/college",
+            "count": "17140"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/youthclub",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/weight",
+            "count": "97005"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/season",
+            "count": "45"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/formerTeam",
+            "count": "48469"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/activeYearsStartYear",
+            "count": "40686"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/draftTeam",
+            "count": "12485"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "386234"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/currentteam",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/currentclub",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthYear",
+            "count": "1016"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "1"
+        }
+    ],
+    "http://dbpedia.org/ontology/Building": [
+        {
+            "subject": "http://dbpedia.org/ontology/height",
+            "count": "5972"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/location",
+            "count": "107551"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/owner",
+            "count": "11668"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "67"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/tenant",
+            "count": "10327"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/floorCount",
+            "count": "8549"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/addedToTheNationalRegisterOfHistoricPlaces",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/architecture",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/address",
+            "count": "14735"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/NationalRegisterOfHistoricPlacesReferenceNumber",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/architecturalStyle",
+            "count": "34404"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/architect",
+            "count": "23084"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/yearOfConstruction",
+            "count": "46610"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/currentTenants",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/cost",
+            "count": "4465"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "17663"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inaugurationDate",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/floorArea",
+            "count": "4862"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/language",
+            "count": "206"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/buildingStartDate",
+            "count": "11558"
+        }
+    ],
+    "http://dbpedia.org/ontology/CelestialBody": [
+        {
+            "subject": "http://dbpedia.org/ontology/averageSpeed",
+            "count": "298"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathCause",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/absoluteMagnitude",
+            "count": "3466"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/mass",
+            "count": "94"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/minimumTemperature",
+            "count": "17"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/density",
+            "count": "117"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/discovered",
+            "count": "4151"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/periapsis",
+            "count": "3557"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/meanTemperature",
+            "count": "21"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/discoverer",
+            "count": "3876"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/maximumTemperature",
+            "count": "18"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/rotationPeriod",
+            "count": "910"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/temperature",
+            "count": "336"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/escapeVelocity",
+            "count": "126"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/surfaceArea",
+            "count": "28"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/orbitalPeriod",
+            "count": "4133"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/apoapsis",
+            "count": "3549"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/formerName",
+            "count": "3182"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/epoch",
+            "count": "3591"
+        }
+    ],
+    "http://dbpedia.org/ontology/City": [
+        {
+            "subject": "http://dbpedia.org/ontology/populationDensity",
+            "count": "10985"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "16669"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevel",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/utcOffset",
+            "count": "22113"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "1"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/type",
+            "count": "15976"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/leaderTitle",
+            "count": "248"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/timeZone",
+            "count": "21679"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/areaOfLand",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/countySeat",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/populationMetro",
+            "count": "1713"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/areaCode",
+            "count": "15663"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/postalCode",
+            "count": "16710"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/governmentType",
+            "count": "3229"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/demonym",
+            "count": "1625"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/areaTotal",
+            "count": "17460"
+        }
+    ],
+    "http://dbpedia.org/ontology/ComicsCharacter": [
+        {
+            "subject": "http://dbpedia.org/ontology/firstAired",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/child",
+            "count": "4"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/broadcastedBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/series",
+            "count": "22"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/voice",
+            "count": "6"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/lastAired",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/creator",
+            "count": "3335"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/fullName",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/firstAppearanceInFilm",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/Company": [
+        {
+            "subject": "http://dbpedia.org/ontology/leaderParty",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/foundingDate",
+            "count": "9820"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "139"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/revenue",
+            "count": "11469"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/netIncome",
+            "count": "5724"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfLocations",
+            "count": "5340"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/industry",
+            "count": "50529"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/foundationPlace",
+            "count": "45"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/operatingIncome",
+            "count": "3789"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/parentCompany",
+            "count": "16344"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/service",
+            "count": "5324"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfEmployees",
+            "count": "24068"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/subsidiary",
+            "count": "3221"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/location",
+            "count": "34125"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/regionServed",
+            "count": "10296"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/keyPerson",
+            "count": "18827"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/type",
+            "count": "42746"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevel",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/product",
+            "count": "24092"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "3794"
+        }
+    ],
+    "http://dbpedia.org/ontology/Film": [
+        {
+            "subject": "http://dbpedia.org/ontology/type",
+            "count": "180"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/writer",
+            "count": "92674"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/starring",
+            "count": "118341"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/broadcastedBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/imdbId",
+            "count": "31226"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/language",
+            "count": "48463"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/cinematography",
+            "count": "59664"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/releaseDate",
+            "count": "24239"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/industry",
+            "count": "76"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/distributor",
+            "count": "71580"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/runtime",
+            "count": "119478"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/director",
+            "count": "122977"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/producer",
+            "count": "73230"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/service",
+            "count": "6"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/musicComposer",
+            "count": "74085"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/editing",
+            "count": "40959"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/gross",
+            "count": "23635"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/budget",
+            "count": "19888"
+        }
+    ],
+    "http://dbpedia.org/ontology/Food": [
+        {
+            "subject": "http://dbpedia.org/ontology/carbohydrate",
+            "count": "10"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/order",
+            "count": "2"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "4624"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/region",
+            "count": "2818"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "6"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/mainIngredient",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/genus",
+            "count": "1"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/servingTemperature",
+            "count": "1459"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/ingredient",
+            "count": "5024"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/protein",
+            "count": "11"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/dishVariation",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/fat",
+            "count": "10"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/division",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/MeanOfTransportation": [
+        {
+            "subject": "http://dbpedia.org/ontology/cylinderCount",
+            "count": "1281"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/designCompany",
+            "count": "1925"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/rocketStages",
+            "count": "241"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/manufacturer",
+            "count": "20386"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/function",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/status",
+            "count": "32520"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/christeningDate",
+            "count": "627"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/bodyStyle",
+            "count": "7370"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/powerType",
+            "count": "6864"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipDisplacement",
+            "count": "3972"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/maidenFlight",
+            "count": "245"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/modelYears",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/assembly",
+            "count": "5593"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/engine",
+            "count": "9161"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/builder",
+            "count": "30891"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/finalFlight",
+            "count": "221"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/countryOrigin",
+            "count": "87"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "10910"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/productionEndYear",
+            "count": "10177"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/wheelbase",
+            "count": "7345"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/productionStartYear",
+            "count": "12925"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/relatedMeanOfTransportation",
+            "count": "5138"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipOrdered",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipDraft",
+            "count": "12440"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/site",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/transmission",
+            "count": "7400"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/successor",
+            "count": "5070"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/failedLaunches",
+            "count": "181"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/operator",
+            "count": "5966"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/owner",
+            "count": "5280"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipClass",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/totalLaunches",
+            "count": "273"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipLaunch",
+            "count": "25105"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/diameter",
+            "count": "188"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/completionDate",
+            "count": "3871"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/buildDate",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/totalProduction",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/maidenVoyage",
+            "count": "1099"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/activeYearsStartDate",
+            "count": "1658"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/class",
+            "count": "16374"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/alternativeName",
+            "count": "3678"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/topSpeed",
+            "count": "22113"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/launchSite",
+            "count": "300"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/product",
+            "count": "8"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/shipBeam",
+            "count": "31962"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/length",
+            "count": "42129"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/division",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/comparable",
+            "count": "73"
+        }
+    ],
+    "http://dbpedia.org/ontology/Monument": [
+        {
+            "subject": "http://dbpedia.org/ontology/category",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/dedicatedTo",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/material",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsSouthwest",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inaugurationDate",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/location",
+            "count": "1656"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nativeName",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsNorth",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/religion",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/designer",
+            "count": "588"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsWest",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsSoutheast",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/MusicalWork": [
+        {
+            "subject": "http://dbpedia.org/ontology/language",
+            "count": "1250"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/album",
+            "count": "58510"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/formerBandMember",
+            "count": "4"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/writer",
+            "count": "62307"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/recordedIn",
+            "count": "5648"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/releaseDate",
+            "count": "52880"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/recordLabel",
+            "count": "65862"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/precededBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/format",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/producer",
+            "count": "48695"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/runtime",
+            "count": "66391"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/artist",
+            "count": "79853"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/type",
+            "count": "7372"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/timeZone",
+            "count": "6"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/genre",
+            "count": "63437"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/associatedBand/associatedMusicalArtist",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/followedBy",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/Politician": [
+        {
+            "subject": "http://dbpedia.org/ontology/residence",
+            "count": "24673"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/successor",
+            "count": "4801"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/activeYearsStartDate",
+            "count": "4209"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/battle",
+            "count": "257"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/office",
+            "count": "2546"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inOfficeWhilePrimeMinister",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathYear",
+            "count": "142"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inOfficeWhilePresident",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inOfficeWhileVicePresident",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthYear",
+            "count": "187"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathDate",
+            "count": "78720"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inOfficeWhileGovernor",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/party",
+            "count": "133240"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/religion",
+            "count": "39"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/almaMater",
+            "count": "60801"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/award",
+            "count": "2753"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "3016"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/region",
+            "count": "1016"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/militaryBranch",
+            "count": "270"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/spouse",
+            "count": "9819"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/inOfficeWhileMonarch",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/predecessor",
+            "count": "3"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasDeputy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nationality",
+            "count": "31505"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "148716"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "65908"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/profession",
+            "count": "12430"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/activeYearsEndDate",
+            "count": "3748"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "151772"
+        }
+    ],
+    "http://dbpedia.org/ontology/Scientist": [
+        {
+            "subject": "http://dbpedia.org/ontology/spouse",
+            "count": "1508"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "14229"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/almaMater",
+            "count": "29438"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/influencedBy",
+            "count": "2190"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "28658"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/award",
+            "count": "12457"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/religion",
+            "count": "5"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthName",
+            "count": "6547"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/residence",
+            "count": "3551"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "28402"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "79"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/professionalField",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nationality",
+            "count": "10532"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/type",
+            "count": "3"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/citizenship",
+            "count": "2670"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/knownFor",
+            "count": "15379"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/areaOfWater",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/doctoralAdvisor",
+            "count": "10304"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathDate",
+            "count": "16581"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/timeZone",
+            "count": "0"
+        }
+    ],
+    "http://dbpedia.org/ontology/SportsTeam": [
+        {
+            "subject": "http://dbpedia.org/ontology/owner",
+            "count": "837"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/location",
+            "count": "3184"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/champions",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/ground",
+            "count": "2514"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/league",
+            "count": "7098"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/city",
+            "count": "2754"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/manager",
+            "count": "1161"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/fullName",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/operator",
+            "count": "4"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nickname",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/season",
+            "count": "1170"
+        }
+    ],
+    "http://dbpedia.org/ontology/University": [
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfPostgraduateStudents",
+            "count": "3789"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/president",
+            "count": "1648"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/outlookRanking",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/wasGivenTheTechnicalCampusStatusBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsNortheast",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfDoctoralStudents",
+            "count": "926"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/officialSchoolColour",
+            "count": "6308"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/city",
+            "count": "23138"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsNorthwest",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/affiliation",
+            "count": "7897"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/elevationAboveTheSeaLevel",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isPartOf",
+            "count": "181"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/hasToItsWest",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/director",
+            "count": "334"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "15052"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/sportGoverningBody",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/campus",
+            "count": "6023"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/religion",
+            "count": "139"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/dean",
+            "count": "618"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfStudents",
+            "count": "9724"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/rector",
+            "count": "606"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/state",
+            "count": "12180"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nickname",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/sportsOffered",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfUndergraduateStudents",
+            "count": "4523"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/academicStaffSize",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/motto",
+            "count": "9766"
+        }
+    ],
+    "http://dbpedia.org/ontology/WrittenWork": [
+        {
+            "subject": "http://dbpedia.org/ontology/mediaType",
+            "count": "14473"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/influencedBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/author",
+            "count": "51588"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/language",
+            "count": "14791"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/genre",
+            "count": "4717"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/followedBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/isbnNumber",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/issnNumber",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/literaryGenre",
+            "count": "27367"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/editor",
+            "count": "4367"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/codenCode",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/precededBy",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/impactFactor",
+            "count": "5168"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/libraryofCongressClassification",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/publisher",
+            "count": "54695"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/oclcNumber",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/founder",
+            "count": "826"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/releaseDate",
+            "count": "5043"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/country",
+            "count": "14110"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/headquarter",
+            "count": "6321"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/abbreviation",
+            "count": "9257"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/city",
+            "count": "3843"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/firstPublicationYear",
+            "count": "8797"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/LCCN_number",
+            "count": "0"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/numberOfPages",
+            "count": "32707"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/academicDiscipline",
+            "count": "8445"
+        }
+    ],
+    "http://dbpedia.org/ontology/Person": [
+        {
+            "subject": "http://www.w3.org/2000/01/rdf-schema#label",
+            "count": "1765706"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthDate",
+            "count": "1000500"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthYear",
+            "count": "261538"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathYear",
+            "count": "136964"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/alias",
+            "count": "35264"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthName",
+            "count": "166662"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathDate",
+            "count": "363527"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/birthPlace",
+            "count": "951920"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/deathPlace",
+            "count": "295254"
+        },
+        {
+            "subject": "http://dbpedia.org/ontology/nationality",
+            "count": "143415"
+        }
+    ]
+}

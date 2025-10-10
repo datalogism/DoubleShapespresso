@@ -1,0 +1,225 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/MeanOfTransportationShape> a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/totalLaunches> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/owner> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/weight> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/productionEndYear> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/activeYearsEndDate> ],
+        [ sh:class <http://dbpedia.org/datatype/millimetre> ;
+            sh:path <http://dbpedia.org/ontology/MeanOfTransportation/length> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:path <http://dbpedia.org/ontology/rocketFunction> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/modelStartYear> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/bodyStyle> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/modelEndYear> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/shipDisplacement> ],
+        [ sh:path <http://dbpedia.org/ontology/class> ],
+        [ sh:class <http://dbpedia.org/ontology/MeanOfTransportation> ;
+            sh:path <http://dbpedia.org/ontology/relatedMeanOfTransportation> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:path <http://dbpedia.org/ontology/countryOrigin> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/homeport> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wheelbase> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/productionStartYear> ],
+        [ sh:class <http://dbpedia.org/ontology/Image> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/thumbnail> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/length> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/alternativeName> ],
+        [ sh:path <http://dbpedia.org/ontology/operator> ],
+        [ sh:class <http://dbpedia.org/datatype/millimetre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Automobile/wheelbase> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/unitCost> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/rocketStages> ],
+        [ sh:class <http://dbpedia.org/datatype/millimetre> ;
+            sh:path <http://dbpedia.org/ontology/MeanOfTransportation/height> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/activeYearsEndYear> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/captureDate> ],
+        [ sh:path <http://dbpedia.org/ontology/successor> ],
+        [ sh:class <http://dbpedia.org/ontology/AutomobileEngine> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/engine> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/maidenVoyage> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/capacity> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/commissioningDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Building> ;
+            sh:path <http://dbpedia.org/ontology/launchSite> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/status> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/maidenFlight> ],
+        [ sh:datatype xsd:gYear ;
+            sh:path <http://dbpedia.org/ontology/yearOfConstruction> ],
+        [ sh:path foaf:nick ],
+        [ sh:datatype xsd:date ;
+            sh:path <http://dbpedia.org/ontology/acquirementDate> ],
+        [ sh:class <http://dbpedia.org/datatype/kilogram> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/MeanOfTransportation/weight> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/recommissioningDate> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/cost> ],
+        [ sh:path <http://dbpedia.org/ontology/powerType> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/finalFlight> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/designer> ],
+        [ sh:path <http://dbpedia.org/ontology/builder> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/shipBeam> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/motto> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/origin> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/failedLaunches> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/retired> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:class <http://dbpedia.org/ontology/Automobile> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/automobilePlatform> ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfDoors> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/activeYearsStartDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/manufacturer> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/layingDown> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/transmission> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/engineType> ],
+        [ sh:path <http://dbpedia.org/ontology/assembly> ],
+        [ sh:class <http://dbpedia.org/ontology/Company> ;
+            sh:path <http://dbpedia.org/ontology/designCompany> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path foaf:depiction ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/activeYearsStartYear> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/variantOf> ],
+        [ sh:class <http://dbpedia.org/datatype/millimetre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/MeanOfTransportation/width> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/decommissioningDate> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberBuilt> ],
+        [ sh:path <http://dbpedia.org/ontology/layout> ],
+        [ sh:path <http://dbpedia.org/ontology/predecessor> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/completionDate> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/height> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/topSpeed> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/shipLaunch> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/width> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/shipDraft> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/cylinderCount> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/diameter> ],
+        [ sh:class <http://dbpedia.org/ontology/Battery> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/battery> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/MeanOfTransportation> .
+

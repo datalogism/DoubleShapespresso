@@ -6,9 +6,9 @@ from datetime import datetime
 
 import pandas as pd
 
-from shapespresso.pipeline import construct_prompt
-from shapespresso.pipeline import OpenAIModel, ClaudeModel, OllamaModel
-from shapespresso.pipeline import local_generation_workflow, global_generation_workflow
+from shapespresso.pipeline import construct_prompt, construct_perfect_input_prompt
+from shapespresso.pipeline import OpenAIModel, ClaudeModel, OllamaModel, LiquiAIModel
+from shapespresso.pipeline import local_generation_workflow, global_generation_workflow, agentic_generation_workflow
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         '--task',
         type=str,
-        choices=["prompt", "generate"],
+        choices=["prompt", "generate","test_prompt","test_generate"],
         required=True,
         help="Task to perform: 'prompt' to construct prompts, 'generate' to run ShEx generation"
     )
@@ -38,15 +38,23 @@ def main():
     parser.add_argument(
         '--dataset',
         type=str,
-        choices=["wes", "yagos"],
+        choices=["wes", "yagos", "dbpedia"],
         required=True,
         help="Dataset to use: 'wes' (Wikidata EntitySchema) or 'yagos'"
+    )
+    parser.add_argument(
+        '--syntax',
+        type=str,
+        default='ShEx',
+        required=False,
+        choices=["ShEx","SHACL"],
+        help="Mode of prompt engineering"
     )
     parser.add_argument(
         '--mode',
         type=str,
         required=True,
-        choices=["local", "global", "triples"],
+        choices=["local", "global", "triples","agentic"],
         help="Mode of prompt engineering"
     )
     parser.add_argument(
@@ -166,6 +174,30 @@ def main():
                 class_label=class_label,
                 instance_of_uri=instance_of_uri,
                 dataset=args.dataset,
+                syntax=args.syntax,
+                endpoint_url=args.endpoint_url,
+                mode=args.mode,
+                few_shot=args.few_shot,
+                few_shot_example_path=args.few_shot_example_path,
+                graph_info_path=args.graph_info_path,
+                information_types=args.information_types,
+                num_instances=args.num_instances,
+                num_class_distribution=args.num_class_distribution,
+                threshold=args.threshold,
+                sort_by=args.sort_by,
+                answer_keys=args.answer_keys,
+                save_prompt_path=save_prompt_path,
+            )
+    elif args.task == "test_prompt":
+        for class_uri, class_label in dict(zip(class_uris, class_labels)).items():
+            class_id = class_uri.split("/")[-1]
+            save_prompt_path = f"{args.output_dir}/{class_id}.json"
+            prompt = construct_perfect_input_prompt(
+                class_uri=class_uri,
+                class_label=class_label,
+                instance_of_uri=instance_of_uri,
+                dataset=args.dataset,
+                syntax=args.syntax,
                 endpoint_url=args.endpoint_url,
                 mode=args.mode,
                 few_shot=args.few_shot,
@@ -186,19 +218,40 @@ def main():
             model = OpenAIModel(model_name=args.model_name)
         elif "claude" in args.model_name:
             model = ClaudeModel(model_name=args.model_name)
+        elif "slm" in args.model_name:
+            model = LiquiAIModel(model_name="LiquidAI/LFM2-350M")
         else:
             raise NotImplementedError(f"Model {args.model_name} not implemented")
         logger.info(f"Running ShEx generation using model '{args.model_name}'")
 
         for class_uri, class_label in dict(zip(class_uris, class_labels)).items():
             class_id = class_uri.split("/")[-1]
-            if args.mode in ["local", "triples"]:
+            if args.mode == "agentic":
+                agentic_generation_workflow(
+                    model=model,
+                    class_uri=class_uri,
+                    class_label=class_label,
+                    instance_of_uri=instance_of_uri,
+                    dataset=args.dataset,
+                    syntax=args.syntax,
+                    endpoint_url=args.endpoint_url,
+                    mode=args.mode,
+                    output_dir=args.output_dir,
+                    few_shot=args.few_shot,
+                    few_shot_example_path=args.few_shot_example_path,
+                    num_instances=args.num_instances,
+                    sort_by=args.sort_by,
+                    graph_info_path=args.graph_info_path,
+                    load_prompt_path=f"{args.prompts_dir}/{class_id}.json"
+                )
+            elif args.mode in ["local", "triples"]:
                 local_generation_workflow(
                     model=model,
                     class_uri=class_uri,
                     class_label=class_label,
                     instance_of_uri=instance_of_uri,
                     dataset=args.dataset,
+                    syntax=args.syntax,
                     endpoint_url=args.endpoint_url,
                     mode=args.mode,
                     output_dir=args.output_dir,
@@ -216,6 +269,7 @@ def main():
                     class_label=class_label,
                     instance_of_uri=instance_of_uri,
                     dataset=args.dataset,
+                    syntax=args.syntax,
                     endpoint_url=args.endpoint_url,
                     output_dir=args.output_dir,
                     few_shot=args.few_shot,

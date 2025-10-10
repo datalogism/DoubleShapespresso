@@ -1,0 +1,200 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/WrittenWorkShape> a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/premierePlace> ],
+        [ sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/literaryGenre> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/characterInPlay> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/illustrator> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/license> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/isbn> ],
+        [ sh:class <http://dbpedia.org/ontology/City> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/city> ],
+        [ sh:path <http://dbpedia.org/ontology/nonFictionSubject> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/settingOfPlay> ],
+        [ sh:path <http://dbpedia.org/ontology/format> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/lastPublicationDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Genre> ;
+            sh:path <http://dbpedia.org/ontology/genre> ],
+        [ sh:class <http://dbpedia.org/ontology/Language> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/originalLanguage> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/oclc> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/firstPublicationDate> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/publicationDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/translator> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/owner> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/dcc> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/impactFactor> ],
+        [ sh:path <http://dbpedia.org/ontology/academicDiscipline> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abbreviation> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:path <http://dbpedia.org/ontology/location> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/firstPublicationYear> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/lccn> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:class <http://dbpedia.org/ontology/Work> ;
+            sh:path <http://dbpedia.org/ontology/subsequentWork> ],
+        [ sh:class <http://dbpedia.org/ontology/Image> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/thumbnail> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Newspaper> ;
+            sh:path <http://dbpedia.org/ontology/sisterNewspaper> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/lcc> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path foaf:depiction ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:class <http://dbpedia.org/ontology/Work> ;
+            sh:path <http://dbpedia.org/ontology/previousWork> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/jstor> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:class <http://dbpedia.org/ontology/Magazine> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/magazine> ],
+        [ sh:minCount 1 ;
+            sh:path dc:publisher ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/imageSize> ],
+        [ sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/mediaType> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/issn> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/frequencyOfPublication> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/depictionDescription> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/formerName> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/premiereYear> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/logo> ],
+        [ sh:datatype xsd:string ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/openAccessContent> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/circulation> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/author> ],
+        [ sh:class <http://dbpedia.org/ontology/Language> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/language> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/releaseDate> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/coden> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/premiereDate> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/subjectOfPlay> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/editor> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/publisher> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/writer> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/finalPublicationYear> ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfPages> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/coverArtist> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfVolumes> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/chiefEditor> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/previousEditor> ],
+        [ sh:path <http://dbpedia.org/ontology/series> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/imdbId> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/editorTitle> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/WrittenWork> .
+

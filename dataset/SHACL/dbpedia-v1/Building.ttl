@@ -1,0 +1,207 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/BuildingShape> a sh:NodeShape ;
+    sh:property [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/governingBody> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/cuisine> ],
+        [ sh:class <http://dbpedia.org/ontology/Genre> ;
+            sh:path <http://dbpedia.org/ontology/genre> ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/isPartOf> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.georss.org/georss/point> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/bedCount> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/height> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/dressCode> ],
+        [ sh:class <http://dbpedia.org/ontology/School> ;
+            sh:path <http://dbpedia.org/ontology/highschool> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/status> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/position> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/activeYearsStartYear> ],
+        [ sh:class <http://dbpedia.org/ontology/Architect> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/architect> ],
+        [ sh:datatype xsd:gYear ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/yearOfConstruction> ],
+        [ sh:class <http://dbpedia.org/ontology/City> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/city> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/seatingCapacity> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingDate> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/alternativeName> ],
+        [ sh:path <http://dbpedia.org/ontology/industry> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:path <http://dbpedia.org/ontology/operator> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/tenant> ],
+        [ sh:path <http://dbpedia.org/ontology/subdivision> ],
+        [ sh:datatype xsd:date ;
+            sh:path <http://dbpedia.org/ontology/openingDate> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/buildingEndDate> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/elevatorCount> ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/floorCount> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://purl.org/linguistics/gold/hypernym> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/completionDate> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/address> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/formerName> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfParkingSpaces> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/floorArea> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/state> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfVisitors> ],
+        [ sh:path <http://dbpedia.org/ontology/picture> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/code> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfRestaurants> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/width> ],
+        [ sh:path foaf:page ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/region> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/architecturalStyle> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:path <http://dbpedia.org/ontology/affiliation> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/currentlyUsedFor> ],
+        [ sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/builder> ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/cost> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/buildingStartDate> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#long> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/numberOfRooms> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/nrhpReferenceNumber> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/headChef> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/area> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/classification> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/originalName> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:path <http://dbpedia.org/ontology/numberOfSuites> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/owner> ],
+        [ sh:class <http://dbpedia.org/datatype/squareMetre> ;
+            sh:path <http://dbpedia.org/ontology/Building/floorArea> ],
+        [ sh:path foaf:nick ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:path <http://dbpedia.org/ontology/nearestCity> ],
+        [ sh:class <http://dbpedia.org/ontology/Company> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/chain> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/location> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:path <http://dbpedia.org/ontology/developer> ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/closingDate> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:path <http://dbpedia.org/ontology/keyPerson> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/collection> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/director> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/Building> .
+

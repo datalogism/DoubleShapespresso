@@ -1,0 +1,61 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/ComicsCharacterShape> a sh:NodeShape ;
+    sh:property [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/writer> ],
+        [ sh:minCount 1 ;
+            sh:path dcterms:subject ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/lastAppearance> ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/creator> ],
+        [ sh:class <http://dbpedia.org/ontology/Genre> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/genre> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:givenName ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/firstAppearance> ],
+        [ sh:path <http://dbpedia.org/ontology/series> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:class <http://dbpedia.org/ontology/Image> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/thumbnail> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/portrayer> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:class <http://dbpedia.org/ontology/Agent> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/publisher> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/imdbId> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/ComicsCharacter> .
+

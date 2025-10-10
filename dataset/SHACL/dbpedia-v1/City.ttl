@@ -1,0 +1,225 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/CityShape> a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaCode> ],
+        [ sh:class <http://dbpedia.org/ontology/Mayor> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/mayor> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationTotalRanking> ],
+        [ sh:class <http://dbpedia.org/ontology/Province> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/province> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/areaMetro> ],
+        [ sh:class <http://dbpedia.org/ontology/Place> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/location> ],
+        [ sh:class <http://dbpedia.org/ontology/Image> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/thumbnail> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationUrban> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.georss.org/georss/point> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageRevisionID> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#long> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaTotal> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/timeZone> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/postalCode> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationDensity> ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#geometry> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/leaderTitle> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/utcOffset> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/predecessor> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/founder> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/leaderName> ],
+        [ sh:class <http://dbpedia.org/ontology/SportsTeam> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/team> ],
+        [ sh:class <http://dbpedia.org/ontology/PersonFunction> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/politicalLeader> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/maximumElevation> ],
+        [ sh:path <http://dbpedia.org/ontology/namedAfter> ],
+        [ sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/subdivision> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/federalState> ],
+        [ sh:class <http://dbpedia.org/ontology/Organisation> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/governingBody> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaMetro> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaWater> ],
+        [ sh:class <http://dbpedia.org/ontology/PopulatedPlace> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/district> ],
+        [ sh:class <http://dbpedia.org/ontology/GovernmentType> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/governmentType> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/areaUrban> ],
+        [ sh:class <http://dbpedia.org/ontology/BodyOfWater> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/riverMouth> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path foaf:depiction ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/synonym> ],
+        [ sh:class <http://dbpedia.org/ontology/Saint> ;
+            sh:path <http://dbpedia.org/ontology/saint> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:homepage ],
+        [ sh:class <http://dbpedia.org/ontology/Country> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/country> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/area> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/elevation> ],
+        [ sh:class <http://dbpedia.org/ontology/SportsLeague> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/league> ],
+        [ sh:class <http://dbpedia.org/datatype/inhabitantsPerSquareKilometre> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/populationDensity> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/isoCodeRegion> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/originalName> ],
+        [ sh:maxCount 1 ;
+            sh:path foaf:nick ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationMetroDensity> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/faaLocationIdentifier> ],
+        [ sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/leaderParty> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/area> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://purl.org/linguistics/gold/hypernym> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ],
+        [ sh:datatype rdf:langString ;
+            sh:path <http://dbpedia.org/ontology/demonym> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaLand> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationTotal> ],
+        [ sh:class <http://dbpedia.org/datatype/inhabitantsPerSquareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/populationMetroDensity> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/areaUrban> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/licenceNumber> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationUrbanDensity> ],
+        [ sh:minCount 1 ;
+            sh:path foaf:name ],
+        [ sh:datatype xsd:date ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/foundingDate> ],
+        [ sh:datatype xsd:string ;
+            sh:path <http://dbpedia.org/ontology/motto> ],
+        [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/populationMetro> ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/percentageOfAreaWater> ],
+        [ sh:class <http://dbpedia.org/datatype/inhabitantsPerSquareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/populationUrbanDensity> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/PopulatedPlace/areaTotal> ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/wikiPageID> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/minimumElevation> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/City> .
+

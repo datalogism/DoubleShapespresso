@@ -1,0 +1,123 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://shaclshapes.org/CelestialBodyShape> a sh:NodeShape ;
+    sh:property [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/density> ],
+        [ sh:datatype rdf:langString ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abstract> ],
+        [ sh:class <http://dbpedia.org/datatype/kelvin> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/temperature> ],
+        [ sh:path <http://purl.org/linguistics/gold/hypernym> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/periapsis> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/apoapsis> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/apparentMagnitude> ],
+        [ sh:class <http://dbpedia.org/datatype/squareKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/surfaceArea> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/mass> ],
+        [ sh:class <http://dbpedia.org/datatype/kilogram> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/mass> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:comment ],
+        [ sh:path <http://dbpedia.org/ontology/type> ],
+        [ sh:path foaf:name ],
+        [ sh:datatype xsd:double ;
+            sh:path <http://dbpedia.org/ontology/temperature> ],
+        [ sh:class <http://dbpedia.org/datatype/kilometre> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/periapsis> ],
+        [ sh:class <http://dbpedia.org/datatype/kilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/meanRadius> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/averageSpeed> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/volume> ],
+        [ sh:class <http://dbpedia.org/datatype/day> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/orbitalPeriod> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/detectionMethod> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/rotationPeriod> ],
+        [ sh:class <http://dbpedia.org/ontology/Person> ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/discoverer> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/surfaceArea> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/orbitalPeriod> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/meanRadius> ],
+        [ sh:class <http://dbpedia.org/datatype/kilometrePerSecond> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/averageSpeed> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/escapeVelocity> ],
+        [ sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path rdfs:label ],
+        [ sh:class <http://dbpedia.org/datatype/kilogramPerCubicMetre> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/density> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/abbreviation> ],
+        [ sh:datatype rdf:langString ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/formerName> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/absoluteMagnitude> ],
+        [ sh:datatype xsd:double ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/albedo> ],
+        [ sh:datatype xsd:date ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/discovered> ],
+        [ sh:class <http://dbpedia.org/datatype/cubicKilometre> ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/volume> ],
+        [ sh:class <http://dbpedia.org/datatype/kilometre> ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:path <http://dbpedia.org/ontology/Planet/apoapsis> ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:path <http://dbpedia.org/ontology/neighbourConstellations> ] ;
+    sh:targetClass <http://dbpedia.org/ontology/CelestialBody> .
+
