@@ -4,7 +4,7 @@ from loguru import logger
 
 from shapespresso.parser import shexc_to_shexj
 from shapespresso.utils import prefix_substitute
-
+from rdflib import Graph
 
 def get_shapes_dict(shex_json: dict) -> dict:
     """ extract shapes dict from ShExJ json object
@@ -23,7 +23,35 @@ def get_shapes_dict(shex_json: dict) -> dict:
     return shapes
 
 
-def extract_constraints(
+def extract_shacl_constraints(
+        shacl_text: str,
+        shape_id: str = None
+) -> list:
+    """ extract constraints from a shex shape
+    Note:
+        only "EachOf" is considered
+
+    Args:
+        shexc_text (str): ShExC text
+        shape_id (str): ShExC shape ID (optional)
+
+    Returns:
+        list of constraints
+    """
+    # transform ShExC text into ShExJ json object
+    #shacl_text, _, _, _ = shexc_to_shexj(shacl_text)
+    #if not shexj_text:  # fail to load ShExC text
+    #    logger.warning("Failed to load ShExC text")
+    #    return []
+
+    graph = Graph()
+    graph.parse(data=shacl_text)
+    shacl_json = json.loads(graph.serialize(format="json-ld"))
+    start_shape = shacl_json[1:]
+    return start_shape
+
+
+def extract_shex_constraints(
         shexc_text: str,
         shape_id: str = None
 ) -> list:

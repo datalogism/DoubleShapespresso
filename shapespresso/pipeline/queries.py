@@ -266,6 +266,7 @@ def query_object_class_distribution(
             GROUP BY ?objectClass ?objectClassLabel
             ORDER BY DESC(?count)
             """
+    print("HERRRE")
     results = endpoint_sparql_query(query, endpoint_url)
     results = [
         {
@@ -277,14 +278,17 @@ def query_object_class_distribution(
 
     if results[:num_classes]:
         total_count = sum([int(result["count"]) for result in results])
-        top_n_classes = [
-            (
-                f"{int(result['count']) * 100 / total_count:.2f}% of subjects have objects in class "
-                f"{prefix_substitute(result['objectClass'])}{result.get('objectClassLabel', '')}"
-            )
-            for result in results[:num_classes]
-        ]
-        return ", ".join(top_n_classes)
+        if(total_count>0):
+            top_n_classes = [
+                (
+                    f"{int(result['count']) * 100 / total_count:.2f}% of subjects have objects in class "
+                    f"{prefix_substitute(result['objectClass'])}{result.get('objectClassLabel', '')}"
+                )
+                for result in results[:num_classes]
+            ]
+            return ", ".join(top_n_classes)
+        else:
+            return None
 
     return None
 
@@ -713,7 +717,6 @@ def query_property_information(
             """
     results = endpoint_sparql_query(query, endpoint_url)
     total_instance_count = int(results[0]["count"])
-
     # property frequency
     if "frequency" in information_types:
         instance_frequency = query_property_frequency(

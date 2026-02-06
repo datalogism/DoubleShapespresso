@@ -14,7 +14,7 @@ def main():
     parser.add_argument(
         '--dataset',
         type=str,
-        choices=['wes', 'yagos'],
+        choices=['wes', 'yagos','dbpedia'],
         required=True,
         help='Dataset',
     )
@@ -23,6 +23,14 @@ def main():
         type=str,
         required=True,
         help='Ground truth directory',
+    )
+    parser.add_argument(
+        '--syntax',
+        type=str,
+        default='ShEx',
+        required=False,
+        choices=["ShEx","SHACL"],
+        help="Mode of prompt engineering"
     )
     parser.add_argument(
         '--predictions_dir',
@@ -67,6 +75,7 @@ def main():
             value_type_constraints = json.loads(Path("resources/wikidata_property_information.json").read_text())
             macro_precision, macro_recall, macro_f1_score = evaluate(
                 dataset=args.dataset,
+                syntax=args.syntax,
                 class_urls=class_uris,
                 class_labels=class_labels,
                 ground_truth_dir=args.ground_truth_dir,
@@ -78,6 +87,7 @@ def main():
         else:
             macro_precision, macro_recall, macro_f1_score = evaluate(
                 dataset=args.dataset,
+                syntax=args.syntax,
                 class_urls=class_uris,
                 class_labels=class_labels,
                 ground_truth_dir=args.ground_truth_dir,
@@ -86,6 +96,7 @@ def main():
                 cardinality_matching_level=args.cardinality_matching_level,
                 value_type_constraints=None
             )
+            print(macro_precision, macro_recall, macro_f1_score)
     else:
         ted = evaluate_ted(
             dataset=args.dataset,

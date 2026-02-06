@@ -17,10 +17,12 @@ class NodeConstraint(BaseModel):
     @model_validator(mode='after')
     def node_constraint_types_validator(self):
         types = [self.nodeKind, self.datatype, self.values]
+        print("<<")
+        print(types)
+        print("<<")
         if sum(constraint is not None for constraint in types) != 1:
             raise ValueError("Exactly one of 'nodeKind', 'datatype', or 'values' must be set.")
         return self
-
 
 class TripleConstraint(BaseModel):
     type: Literal["TripleConstraint"]

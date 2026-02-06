@@ -1,18 +1,20 @@
 import json
 import re
+import sys
 
 from loguru import logger
 from pathlib import Path
-
+from rdflib import Graph
 from shapespresso.parser import shexj_to_shexc
-from shapespresso.syntax import Cardinality, NodeConstraint
+from shapespresso.syntax import Cardinality, NodeConstraint,NodeConstraintSHACL
 from shapespresso.pipeline import (
     query_property_list,
     query_datatype,
     construct_prompt,
     construct_cardinality_prompt,
     construct_node_constraint_prompt,
-    construct_perfect_input_prompt
+    construct_perfect_input_prompt,
+    utils as fct
 )
 def agentic_generation_workflow(
         model,
@@ -177,26 +179,38 @@ def local_generation_workflow(
     response_path = output_dir / f"{class_uri.split('/')[-1]}.txt"
     response_path.write_text(response, encoding='utf-8')
 
-    try:
-        shexc_text = re.findall(r"```shex(.*?)```", response, re.DOTALL)
-        if not shexc_text:
-            shexc_text = re.findall(r"```(.*?)```", response, re.DOTALL)
-        shexc_text = shexc_text[0].strip()
-    except IndexError:
-        shexc_text = response
     if(syntax=="SHACL"):
+        try:
+            shacl_text = re.findall(r"```turtle(.*?)```", response, re.DOTALL)
+            if not shacl_text:
+                shacl_text = re.findall(r"```(.*?)```", response, re.DOTALL)
+            shacl_text = shacl_text[0].strip()
+        except IndexError:
+            shacl_text = response
+
         output_path = Path(output_dir) / f"{class_uri.split('/')[-1]}.ttl"
+        logger.info(f"Writing SHACL schema to {output_path}")
+        output_path.write_text(shacl_text, encoding='utf-8')
     else:
+        try:
+            shexc_text = re.findall(r"```shex(.*?)```", response, re.DOTALL)
+            if not shexc_text:
+                shexc_text = re.findall(r"```(.*?)```", response, re.DOTALL)
+            shexc_text = shexc_text[0].strip()
+        except IndexError:
+            shexc_text = response
+
         output_path = Path(output_dir) / f"{class_uri.split('/')[-1]}.shex"
-    logger.info(f"Writing ShEx schema to {output_path}")
-    output_path.write_text(shexc_text, encoding='utf-8')
+
+        logger.info(f"Writing ShEx schema to {output_path}")
+        output_path.write_text(shexc_text, encoding='utf-8')
 
 
 def global_generation_workflow(
         model,
         class_uri: str,
         class_label: str,
-        syntax:str,
+        syntax: str,
         instance_of_uri: str,
         dataset: str,
         endpoint_url: str,
@@ -234,7 +248,7 @@ def global_generation_workflow(
 
     """
     logger.info(
-        f"Generate ShEx with arguments: "
+        f"Generate shape with arguments: "
         f"model={model.model_name}, "
         f"class_url={class_uri}, "
         f"class_label={class_label}, "
@@ -286,6 +300,10 @@ def global_generation_workflow(
             num_instances=num_instances,
             graph_info_path=graph_info_path,
         )
+        print("###############")
+        print(prompt)
+
+        print("###############")
         response = model.structured_response(
             prompt=prompt,
             response_model=Cardinality,
@@ -307,114 +325,233 @@ def global_generation_workflow(
             instance_of_uri=instance_of_uri,
             endpoint_url=endpoint_url
         )
+        print(datatype)
 
-        if datatype != "IRI":
-            triple_constraint = {
-                "type": "TripleConstraint",
-                "predicate": predicate_uri,
-                "valueExpr": {
-                    "type": "NodeConstraint",
-                    "datatype": datatype
-                },
-                "min": min_value,
-                "max": max_value
-            }
-            triple_constraints.append(triple_constraint)
+        start_shape_id = "".join(
+            [word.capitalize() for word in class_label.split()]) if dataset == "wes" else class_label
+        if syntax == "SHACL":
+            print("-",class_uri)
+            print("-",predicate_uri)
+            current_id=fct.prefix_replace(str(class_uri))+"_"+fct.prefix_replace(str(predicate_uri))
+            if datatype != "IRI":
+                    if(max_value!=-1):
+                        triple_constraint = {
+                            "@id": "_:"+current_id,
+                            "sh:path": predicate_uri,
+                            "sh:datatype": datatype,
+                            "sh:minCount": min_value,
+                            "sh:maxCount": max_value
+                        }
+                    else:
+                        triple_constraint = {
+                            "@id": "_:"+current_id,
+                            "sh:path": predicate_uri,
+                            "sh:datatype": datatype,
+                            "sh:minCount": min_value
+                        }
+                    triple_constraints.append(triple_constraint)
+
+            else:
+                print("#######################TODO")
+                prompt = construct_node_constraint_prompt(
+                    class_uri=class_uri,
+                    class_label=class_label,
+                    predicate_uri=predicate_uri,
+                    dataset=dataset,
+                    syntax=syntax,
+                    instance_of_uri=instance_of_uri,
+                    endpoint_url=endpoint_url,
+                    few_shot=few_shot,
+                    few_shot_example_path=few_shot_example_path,
+                    num_instances=num_instances,
+                    num_class_distribution=num_class_distribution,
+                    graph_info_path=graph_info_path,
+                )
+                print("XXXXXXXXXXX")
+                print(prompt)
+                print("XXXXXXXXXXX")
+
+                response = model.structured_response(prompt=prompt, response_model=NodeConstraintSHACL)
+                if response.sh_class != None:
+                    if (max_value != -1):
+                        triple_constraint = {
+                            "@id": "_:" + current_id,
+                            "sh:path": predicate_uri,
+                            "sh:class": response.sh_class,
+                            "sh:minCount": min_value,
+                            "sh:maxCount": max_value
+                        }
+                    else:
+                        triple_constraint = {
+                            "@id": "_:" + current_id,
+                            "sh:path": predicate_uri,
+                            "sh:class": response.sh_class,
+                            "sh:minCount": min_value
+                        }
+
+                    triple_constraints.append(triple_constraint)
+                else:
+                    if (max_value != -1):
+                        triple_constraint = {
+                            "@id": "_:" + current_id,
+                            "sh:path": predicate_uri,
+                            "sh:datatype": "sh:IRI",
+                            "sh:minCount": min_value,
+                            "sh:maxCount": max_value
+                        }
+                    else:
+                        triple_constraint = {
+                            "@id": "_:" + current_id,
+                            "sh:path": predicate_uri,
+                            "sh:datatype": "sh:IRI",
+                            "sh:minCount": min_value
+                        }
+                    triple_constraints.append(triple_constraint)
+
         else:
-            prompt = construct_node_constraint_prompt(
-                class_uri=class_uri,
-                class_label=class_label,
-                predicate_uri=predicate_uri,
-                dataset=dataset,
-                instance_of_uri=instance_of_uri,
-                endpoint_url=endpoint_url,
-                few_shot=few_shot,
-                few_shot_example_path=few_shot_example_path,
-                num_instances=num_instances,
-                num_class_distribution=num_class_distribution,
-                graph_info_path=graph_info_path,
-            )
-            response = model.structured_response(
-                prompt=prompt,
-                response_model=NodeConstraint
-            )
-
-            if response.type == "value_shape":
-                try:
-                    value_shape_name = response.name.replace(" ", "")
-                except AttributeError:
-                    value_shape_name = predicate_uri.split("/")[-1]
-                triple_constraint = {
-                    "type": "TripleConstraint",
-                    "predicate": predicate_uri,
-                    "valueExpr": value_shape_name,
-                    "min": min_value,
-                    "max": max_value
-                }
-                value_shape = {
-                    "type": "Shape",
-                    "id": value_shape_name,
-                    "extra": [instance_of_uri],
-                    "expression": {
+            if datatype != "IRI":
+                    triple_constraint = {
                         "type": "TripleConstraint",
-                        "predicate": instance_of_uri,
+                        "predicate": predicate_uri,
+                        "valueExpr": {
+                            "type": "NodeConstraint",
+                            "datatype": datatype
+                        },
+                        "min": min_value,
+                        "max": max_value
+                    }
+                    triple_constraints.append(triple_constraint)
+            else:
+                prompt = construct_node_constraint_prompt(
+                    class_uri=class_uri,
+                    class_label=class_label,
+                    predicate_uri=predicate_uri,
+                    dataset=dataset,
+                    syntax= syntax,
+                    instance_of_uri=instance_of_uri,
+                    endpoint_url=endpoint_url,
+                    few_shot=few_shot,
+                    few_shot_example_path=few_shot_example_path,
+                    num_instances=num_instances,
+                    num_class_distribution=num_class_distribution,
+                    graph_info_path=graph_info_path,
+                )
+                response = model.structured_response(
+                    prompt=prompt,
+                    response_model=NodeConstraint
+
+                )
+
+                if response.type == "value_shape":
+                    try:
+                        value_shape_name = response.name.replace(" ", "")
+                    except AttributeError:
+                        value_shape_name = predicate_uri.split("/")[-1]
+                    triple_constraint = {
+                        "type": "TripleConstraint",
+                        "predicate": predicate_uri,
+                        "valueExpr": value_shape_name,
+                        "min": min_value,
+                        "max": max_value
+                    }
+                    value_shape = {
+                        "type": "Shape",
+                        "id": value_shape_name,
+                        "extra": [instance_of_uri],
+                        "expression": {
+                            "type": "TripleConstraint",
+                            "predicate": instance_of_uri,
+                            "valueExpr": {
+                                "type": "NodeConstraint",
+                                "values": response.values
+                            }
+                        }
+                    }
+                    triple_constraints.append(triple_constraint)
+                    value_shapes.append(value_shape)
+
+                elif response.type == "values_constraint":
+                    triple_constraint = {
+                        "type": "TripleConstraint",
+                        "predicate": predicate_uri,
                         "valueExpr": {
                             "type": "NodeConstraint",
                             "values": response.values
-                        }
+                        },
+                        "min": min_value,
+                        "max": max_value
                     }
-                }
-                triple_constraints.append(triple_constraint)
-                value_shapes.append(value_shape)
+                    triple_constraints.append(triple_constraint)
 
-            elif response.type == "values_constraint":
-                triple_constraint = {
-                    "type": "TripleConstraint",
-                    "predicate": predicate_uri,
-                    "valueExpr": {
-                        "type": "NodeConstraint",
-                        "values": response.values
-                    },
-                    "min": min_value,
-                    "max": max_value
-                }
-                triple_constraints.append(triple_constraint)
+                else:
+                    triple_constraint = {
+                        "type": "TripleConstraint",
+                        "predicate": predicate_uri,
+                        "valueExpr": {
+                            "type": "NodeConstraint",
+                            "nodeKind": "iri"
+                        },
+                        "min": min_value,
+                        "max": max_value
+                    }
+                    triple_constraints.append(triple_constraint)
 
-            else:
-                triple_constraint = {
-                    "type": "TripleConstraint",
-                    "predicate": predicate_uri,
-                    "valueExpr": {
-                        "type": "NodeConstraint",
-                        "nodeKind": "iri"
-                    },
-                    "min": min_value,
-                    "max": max_value
-                }
-                triple_constraints.append(triple_constraint)
-
-    # format ShEx
-    # TODO: include more advanced ShEx syntax features
-    start_shape_id = "".join([word.capitalize() for word in class_label.split()]) if dataset == "wes" else class_label
-    start_shape = {
-        "type": "Shape",
-        "id": start_shape_id,
-        "extra": [instance_of_uri],
-        "expression": {
-            "type": "EachOf",
-            "expressions": triple_constraints
+    start_shape_id = "".join(
+        [word.capitalize() for word in class_label.split()]) if dataset == "wes" else class_label
+    if syntax=="SHACL":
+        jsonld_shape = {
+            "@context": {
+                "sh": "http://www.w3.org/ns/shacl#",
+                "geo": "http://www.opengis.net/ont/geosparql#",
+                "owl": "http://www.w3.org/2002/07/owl#",
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+                "schema": "http://schema.org/",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "yago": "http://yago-knowledge.org/resource/"
+            },
+            "@id": start_shape_id,
+            "@type": "sh:NodeShape",
+            "sh:targetClass": class_uri,
+            "sh:property": triple_constraints
         }
-    }
-    shexj_json = {
-        "type": "Schema",
-        "start": start_shape_id,
-        "shapes": [start_shape, *value_shapes],
-    }
-    shexj_text = json.dumps(shexj_json)
-    shexc_text = shexj_to_shexc(
-        shexj_text=shexj_text,
-    )
+        print("#####################")
+        print(jsonld_shape)
+        jsonld_txt=json.dumps(jsonld_shape)
+        g = Graph()
+        g.parse(data=jsonld_txt, format='json-ld')
 
-    output_path = Path(output_dir) / f"{class_uri.split('/')[-1]}.shex"
-    logger.info(f"Writing ShEx schema to {output_path}")
-    output_path.write_text(shexc_text, encoding='utf-8')
+        output_path1 = Path(output_dir) / f"{class_uri.split('/')[-1]}.json"
+        logger.info(f"Writing Json-ld Shape to {output_path1}")
+        with open(output_path1, 'w', encoding='utf-8') as f:
+            json.dump(jsonld_shape, f)
+
+        output_path2 = Path(output_dir) / f"{class_uri.split('/')[-1]}.ttl"
+        logger.info(f"Writing Turtle Shape to {output_path2}")
+        g.serialize(destination=output_path2,format='turtle')
+
+    else:
+        # format ShEx
+        # TODO: include more advanced ShEx syntax features
+        start_shape = {
+            "type": "Shape",
+            "id": start_shape_id,
+            "extra": [instance_of_uri],
+            "expression": {
+                "type": "EachOf",
+                "expressions": triple_constraints
+            }
+        }
+        shexj_json = {
+            "type": "Schema",
+            "start": start_shape_id,
+            "shapes": [start_shape, *value_shapes],
+        }
+        shexj_text = json.dumps(shexj_json)
+        shexc_text = shexj_to_shexc(
+            shexj_text=shexj_text,
+        )
+
+        output_path = Path(output_dir) / f"{class_uri.split('/')[-1]}.shex"
+        logger.info(f"Writing ShEx schema to {output_path}")
+        output_path.write_text(shexc_text, encoding='utf-8')

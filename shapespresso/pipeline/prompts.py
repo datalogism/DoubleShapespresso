@@ -12,27 +12,14 @@ from shapespresso.pipeline import (
     query_triple_examples,
     query_property_list,
     query_property_information,
-    query_instances_predicate_count
+    query_instances_predicate_count,
+    utils as fct
 )
 from shapespresso.utils import endpoint_sparql_query
 import re
 import json
 
-prefix_map = json.loads(Path("resources/prefix_map.json").read_text())
-print(prefix_map)
-def prefix_replace(data):
-    print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-    str_data=str(data)
-    if("<" in str_data):
-        for url in prefix_map.keys():
-            prefix=prefix_map[url]
-            str_data = str_data.replace("<"+url,prefix+":")
-        str_data = str_data.replace(">","")
-    for url in prefix_map.keys():
-        prefix=prefix_map[url]
-        str_data = str_data.replace(url,prefix+":")
-    return str_data
-
+import ast
 def query_local_information(
         dataset: str,
         class_uri: str,
@@ -57,16 +44,16 @@ def query_local_information(
     Returns:
         instance_triples (list[str]): triples of instances retrieved
     """
-    print("HHKKKK")
+    #print("HHKKKK")
     if sort_by == 'predicate_count':
-        print("IN")
+        #print("IN")
         # query for entities with the highest number of distinct properties
         if dataset == "wes" and graph_info_path:
-            print("IN0")
+         #   print("IN0")
             logger.info("Load 'predicate_count' sorted entities")
             instances = json.loads(Path(graph_info_path).read_text())[class_uri][:num_instances]
         else:
-            print("IN1")
+          #  print("IN1")
             instances = query_instances_predicate_count(
                 class_uri=class_uri,
                 dataset=dataset,
@@ -92,7 +79,6 @@ def query_local_information(
         else:
             instance_uris = random.sample(instances, num_instances)
 
-    print("HEY")
     instance_triples = list()
     for instance_uri in instance_uris:
         if dataset == "wes":
@@ -315,10 +301,9 @@ def load_few_shot_prompt(
 
     if mode == "local":
         #few_shot_shex_example = Path(few_shot_example_path).read_text()
-        ############ @Celian I added it to delete the comments
         f = open(Path(few_shot_example_path), 'r')
+        ############ @Celian I added it to delete the comments in the shapes file
         few_shot_shex_example= re.sub(' +', ' '," ".join([n for n in  f.readlines() if not '#' in n]).replace("\n",""))
-        print("HHHHHHHHH")
         few_shot_instance_examples = query_local_information(
             dataset=dataset,
             class_uri=class_uri,
@@ -328,7 +313,7 @@ def load_few_shot_prompt(
             sort_by=sort_by,
             graph_info_path=graph_info_path
         )
-        few_shot_instance_examples=prefix_replace(few_shot_instance_examples)
+        few_shot_instance_examples=fct.prefix_replace(few_shot_instance_examples)
 
         if(syntax=="ShEx"):
             few_shot_prompts.extend([
@@ -366,9 +351,12 @@ def load_few_shot_prompt(
                 },
             ])
     elif mode == "global":
-        print(few_shot_example_path)
-        print(Path(few_shot_example_path).read_text())
-        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+
+        if (syntax == "SHACL"):
+            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+            few_shot_examples = fct.unflatten_toml(few_shot_examples)
+        else:
+            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
 
         for i in range(len(few_shot_examples) // 2):
             example = json.dumps(few_shot_examples[f"example_{i}"], ensure_ascii=False, indent=2)
@@ -378,7 +366,9 @@ def load_few_shot_prompt(
             if (syntax == "ShEx"):
                 answer = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
             elif (syntax == "SHACL"):
-                answer = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
+                print(few_shot_examples[f"answer_{i}"])
+                answer = ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
+
             if answer_keys:
                 answer = {key: value for key, value in answer if key in answer_keys}
 
@@ -416,7 +406,7 @@ def load_few_shot_prompt(
                 )
             )
 
-        few_shot_triple_examples=prefix_replace(few_shot_triple_examples)
+        few_shot_triple_examples=fct.prefix_replace(few_shot_triple_examples)
         if(syntax=="ShEx"):
 
             few_shot_prompts.extend([
@@ -512,14 +502,18 @@ def construct_cardinality_prompt(
             "still be unbounded unless it should be limited (e.g., 1 for a single-value property). If the property "
             "is not applicable to the class, set both minimum and maximum to 0."
         )
-
-    few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+    if(syntax== "SHACL"):
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples= fct.unflatten_toml(few_shot_examples)
+    else:
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
     prompt = [
         {
             "role": "system",
             "content": system_content,
         }
     ]
+    print(few_shot_examples)
     if few_shot:
         for i in range(len(few_shot_examples) // 2):
             predicate_info = few_shot_examples[f"example_{i}"]
@@ -530,13 +524,18 @@ def construct_cardinality_prompt(
             ]
             predicate_info = {key: value for key, value in predicate_info.items() if key in information_types}
             if(syntax=="ShEx"):
+
                 shexj_json = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
                 cardinality = {
                     "min": shexj_json.get("triple_constraint", {"min": 0}).get("min", 1),
                     "max": shexj_json.get("triple_constraint", {"max": 0}).get("max", 1),
                 }
             elif(syntax=="SHACL"):
-                shaclj_json = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
+                print(few_shot_examples[f"answer_{i}"]["shaclj"])
+                shaclj_json=ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
+                print("HEY")
+                print(shaclj_json)
+                #shaclj_json = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
                 cardinality = {
                     "min": shaclj_json["sh:minCount"],
                     "max": shaclj_json["sh:maxCount"],
@@ -629,17 +628,25 @@ def construct_node_constraint_prompt(
             "Focus solely on generating the appropriate node constraint for the provided property."
         )
     elif(syntax=="SHACL"):
+
+        # "2. Value constraint: Restrict the value to a specific set of items.\n"
+        #or a list of classes
         system_content = (
             "You are a knowledge engineer specializing in writing SHACL shape. "
-            "Given property information for a specific class, your task is to generate a node constraint only. "
-            "There are three types of responses you may produce:\n"
-            "1. Value Shape constraint (most common): Specify that the object/value must belong to a "
-            "particular class or a list of classes.\n"
-            "2. Value constraint: Restrict the value to a specific set of items.\n"
-            "3. Node Kind (IRI): Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
+            "Given property information for a specific class, your task is to generate a specifc constraint only in JSON-LD. "
+            "The constraint you may produce:\n"
+            "1. have a sh:class (most common): Specify that the object/value must belong to a particular class .\n"
+            "2. have a sh:datatype with the value \"sh:IRI\": Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
             "Focus solely on generating the appropriate node constraint for the provided property."
         )
-    few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+
+
+    if(syntax== "SHACL"):
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples= fct.unflatten_toml(few_shot_examples)
+    else:
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+
     prompt = [
         {
             "role": "system",
@@ -655,29 +662,38 @@ def construct_node_constraint_prompt(
                 "triple examples", "object_class_distribution", "subject_type_constraint", "value_type_constraint"
             ]
             predicate_info = {key: value for key, value in predicate_info.items() if key in information_types}
-            shexj_json = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
-            # format node constraint answer
-            if isinstance(shexj_json.get("triple_constraint", {}).get("valueExpr", {}), str):
-                node_constraint = {
-                    "type": "value_shape",
-                    "name": shexj_json["triple_constraint"]["valueExpr"],
-                    "extra": shexj_json["value_shape"]["extra"][0],
-                    "predicate": shexj_json["value_shape"]["predicate"],
-                    "values": shexj_json["value_shape"]["values"],
-                }
-            else:
-                if shexj_json.get("triple_constraint", {}).get("valueExpr", {}).get("nodeKind"):
+            if(syntax=="ShEx"):
+                shexj_json = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
+                # format node constraint answer
+                if isinstance(shexj_json.get("triple_constraint", {}).get("valueExpr", {}), str):
                     node_constraint = {
-                        "type": "node_kind",
-                        "node_kind": "iri"
-                    }
-                elif shexj_json.get("triple_constraint", {}).get("valueExpr", {}).get("values"):
-                    node_constraint = {
-                        "type": "values_constraint",
-                        "values": shexj_json["triple_constraint"]["valueExpr"]["values"]
+                        "type": "value_shape",
+                        "name": shexj_json["triple_constraint"]["valueExpr"],
+                        "extra": shexj_json["value_shape"]["extra"][0],
+                        "predicate": shexj_json["value_shape"]["predicate"],
+                        "values": shexj_json["value_shape"]["values"],
                     }
                 else:
-                    continue
+                    if shexj_json.get("triple_constraint", {}).get("valueExpr", {}).get("nodeKind"):
+                        node_constraint = {
+                            "type": "node_kind",
+                            "node_kind": "iri"
+                        }
+                    elif shexj_json.get("triple_constraint", {}).get("valueExpr", {}).get("values"):
+                        node_constraint = {
+                            "type": "values_constraint",
+                            "values": shexj_json["triple_constraint"]["valueExpr"]["values"]
+                        }
+                    else:
+                        continue
+            if(syntax=="SHACL"):
+                #node_constraint = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
+
+                node_constraint=ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
+
+                print("XXXXXXXXXXXXXXXXXXXXXXXXX")
+                print(node_constraint)
+
             prompt.extend([
                 {
                     "role": "user",
@@ -863,7 +879,7 @@ def construct_prompt(
                 graph_info_path=graph_info_path
             )
 
-            instance_examples = prefix_replace(instance_examples)
+            instance_examples = fct.prefix_replace(instance_examples)
 
             if (syntax == "ShEx"):
                 local_prompt = [{
@@ -942,7 +958,7 @@ def construct_prompt(
                 }
                 prompts[-1].append(global_prompt)
                 global_prompts.append(global_prompt)
-
+        print(global_prompts)
         if save_prompt_path:
             logger.info(f"Save prompts to {save_prompt_path}")
             Path(save_prompt_path).write_text(json.dumps(global_prompts, ensure_ascii=False, indent=2))
@@ -989,7 +1005,7 @@ def construct_prompt(
                     )
                 )
 
-            triple_examples = prefix_replace(triple_examples)
+            triple_examples = fct.prefix_replace(triple_examples)
             if (syntax == "ShEx"):
                 triple_prompt = [{
                     "role": "user",

@@ -5,11 +5,11 @@ from loguru import logger
 from itertools import product
 from pathlib import Path
 
-from shapespresso.metrics.utils import extract_constraints
+from shapespresso.metrics.utils import extract_shex_constraints, extract_shacl_constraints
 from shapespresso.utils import prefix_substitute, endpoint_sparql_query
+import sys
 
-
-def predicate_match(y_true: dict, y_pred: dict) -> bool:
+def predicate_match(y_true: dict, y_pred: dict, syntax: str) -> bool:
     """ exact predicate match
 
     Args:
@@ -19,16 +19,32 @@ def predicate_match(y_true: dict, y_pred: dict) -> bool:
     Returns:
         True if predicates of constraints match, otherwise False
     """
-    y_true_predicate = y_true.get("predicate")
-    y_pred_predicate = y_pred.get("predicate")
-
-    if y_true_predicate:
-        return y_true_predicate == y_pred_predicate
+    if syntax == "SHACL":
+        ##### @celian WE NEED TO MANAGE THE SHACL OR CASE HERE
+        try:
+            y_true_predicate = y_true.get('http://www.w3.org/ns/shacl#path')[0]["@id"]
+            y_pred_predicate = y_pred.get('http://www.w3.org/ns/shacl#path')[0]["@id"]
+            if y_true_predicate:
+                return y_true_predicate == y_pred_predicate
+            else:
+                return False
+        except:
+            print("sh:OR to manage here:")
+            print(y_true)
+            print("-----")
+            print(y_pred)
+            return False
     else:
-        return False
+        y_true_predicate = y_true.get("predicate")
+        y_pred_predicate = y_pred.get("predicate")
+    
+        if y_true_predicate:
+            return y_true_predicate == y_pred_predicate
+        else:
+            return False
 
 
-def cardinality_match(y_true: dict, y_pred: dict) -> bool:
+def cardinality_match(y_true: dict, y_pred: dict, syntax: str) -> bool:
     """ exact cardinality match
 
     Args:
@@ -38,15 +54,35 @@ def cardinality_match(y_true: dict, y_pred: dict) -> bool:
     Returns:
         True if cardinality match, otherwise False
     """
-    y_true_min = y_true.get("min", 1)
-    y_true_max = y_true.get("max", 1)
-    y_pred_min = y_pred.get("min", 1)
-    y_pred_max = y_pred.get("max", 1)
+
+    if syntax == "SHACL":
+        if('http://www.w3.org/ns/shacl#minCount' in y_true.keys()):
+            y_true_min = y_true.get('http://www.w3.org/ns/shacl#minCount')[0].get("@value")
+        else:
+            y_true_min = 0
+        if ('http://www.w3.org/ns/shacl#maxCount' in y_true.keys()):
+            y_true_max = y_true.get('http://www.w3.org/ns/shacl#maxCount')[0].get("@value")
+        else:
+            y_true_max =  math.inf
+        if ('http://www.w3.org/ns/shacl#minCount' in y_pred.keys()):
+            y_pred_min = y_pred.get('http://www.w3.org/ns/shacl#minCount')[0].get("@value")
+        else:
+            y_pred_min = 0
+        if ('http://www.w3.org/ns/shacl#maxCount' in y_pred.keys()):
+            y_pred_max = y_pred.get('http://www.w3.org/ns/shacl#maxCount')[0].get("@value")
+        else:
+            y_pred_max =  math.inf
+
+    else:
+        y_true_min = y_true.get("min", 1)
+        y_true_max = y_true.get("max", 1)
+        y_pred_min = y_pred.get("min", 1)
+        y_pred_max = y_pred.get("max", 1)
 
     return y_true_min == y_pred_min and y_true_max == y_pred_max
 
 
-def node_constraint_match(y_true: dict, y_pred: dict) -> bool:
+def node_constraint_match(y_true: dict, y_pred: dict, syntax:str ) -> bool:
     """ exact node constraint match
     Note: very fragile match function, needs improvement to handle more detailed match cases
 
@@ -57,8 +93,18 @@ def node_constraint_match(y_true: dict, y_pred: dict) -> bool:
     Returns:
         True if node constraints match, otherwise False
     """
-    y_true_value_expr = y_true.get("valueExpr")
-    y_pred_value_expr = y_pred.get("valueExpr")
+    if syntax == "SHACL":
+
+        y_true_value_expr =  {k: y_true[k]  for k in y_true.keys() if k!= '@id'}
+        y_pred_value_expr =   {k: y_pred[k]  for k in y_pred.keys() if k!= '@id'}
+        #print("----")
+        #print(y_true_value_expr)
+        #print(y_pred_value_expr)
+        #print(y_true_value_expr == y_pred_value_expr)
+
+    else:
+        y_true_value_expr = y_true.get("valueExpr")
+        y_pred_value_expr = y_pred.get("valueExpr")
 
     if y_true_value_expr and y_true_value_expr == y_pred_value_expr:
         return True
@@ -66,7 +112,7 @@ def node_constraint_match(y_true: dict, y_pred: dict) -> bool:
         return False
 
 
-def exact_constraint_match(y_true: dict, y_pred: dict) -> bool:
+def exact_constraint_match(y_true: dict, y_pred: dict, syntax:str) -> bool:
     """ exact match
     Note:
         very fragile match function, needs improvement to handle more detailed match cases
@@ -78,7 +124,7 @@ def exact_constraint_match(y_true: dict, y_pred: dict) -> bool:
     Returns:
         True if all elements in both constraints are equal, otherwise False
     """
-    return predicate_match(y_true, y_pred) and node_constraint_match(y_true, y_pred) and cardinality_match(y_true, y_pred)
+    return predicate_match(y_true, y_pred, syntax) and node_constraint_match(y_true, y_pred, syntax) and cardinality_match(y_true, y_pred,syntax)
 
 
 def ask_subclass_of(dataset: str, true_class: str, pred_class: str) -> bool:
@@ -140,6 +186,7 @@ def approximate_class_constraint_match(
         dataset: str,
         y_true: dict,
         y_pred: dict,
+        syntax: str,
         value_type_const_classes: list[str] = None
 ) -> bool:
     """ approximate class constraint match
@@ -156,36 +203,40 @@ def approximate_class_constraint_match(
     Returns:
         True if one of ground truth classes is subclass of one of predicted classes, otherwise False
     """
-    y_true_value_expr = y_true.get("valueExpr")
-    y_pred_value_expr = y_pred.get("valueExpr")
-    if y_true_value_expr and y_true_value_expr == y_pred_value_expr:
-        return True
+    if syntax == "SHACL":
+        y_true_value_expr = y_true.pop('@id', None)
+        y_pred_value_expr = y_pred.pop('@id', None)
     else:
-        if isinstance(y_pred_value_expr, str):
-            return False
-        elif y_true_value_expr.get("type") != y_pred_value_expr.get("type"):
-            return False
+        y_true_value_expr = y_true.get("valueExpr")
+        y_pred_value_expr = y_pred.get("valueExpr")
+        if y_true_value_expr and y_true_value_expr == y_pred_value_expr:
+            return True
         else:
-            # value set
-            if y_true_value_expr.get("type") == "NodeConstraint":
-                true_classes = y_true_value_expr.get("values")
-                pred_classes = y_pred_value_expr.get("values")
-                if true_classes and pred_classes:
-                    pred_classes = [item for item in pred_classes if isinstance(item, str)]  # filter out IriStem, etc.
-                    return approximate_class_match(dataset, true_classes, pred_classes, value_type_const_classes)
-                else:
-                    return False
-            # shape reference
-            elif y_true_value_expr.get("type") == "Shape":
-                true_classes = y_true_value_expr.get("expression", {}).get("valueExpr", {}).get("values", [])
-                pred_classes = y_pred_value_expr.get("expression", {}).get("valueExpr", {}).get("values", [])
-                if true_classes and pred_classes:
-                    return approximate_class_match(dataset, true_classes, pred_classes, value_type_const_classes)
-                else:
-                    return False
+            if isinstance(y_pred_value_expr, str):
+                return False
+            elif y_true_value_expr.get("type") != y_pred_value_expr.get("type"):
+                return False
+            else:
+                # value set
+                if y_true_value_expr.get("type") == "NodeConstraint":
+                    true_classes = y_true_value_expr.get("values")
+                    pred_classes = y_pred_value_expr.get("values")
+                    if true_classes and pred_classes:
+                        pred_classes = [item for item in pred_classes if isinstance(item, str)]  # filter out IriStem, etc.
+                        return approximate_class_match(dataset, true_classes, pred_classes, value_type_const_classes)
+                    else:
+                        return False
+                # shape reference
+                elif y_true_value_expr.get("type") == "Shape":
+                    true_classes = y_true_value_expr.get("expression", {}).get("valueExpr", {}).get("values", [])
+                    pred_classes = y_pred_value_expr.get("expression", {}).get("valueExpr", {}).get("values", [])
+                    if true_classes and pred_classes:
+                        return approximate_class_match(dataset, true_classes, pred_classes, value_type_const_classes)
+                    else:
+                        return False
 
 
-def get_constraint_datatype(constraint: dict) -> dict | str:
+def get_constraint_datatype(constraint: dict, syntax: str) -> dict | str:
     """ extract datatype information from constraint
 
     Args:
@@ -194,35 +245,62 @@ def get_constraint_datatype(constraint: dict) -> dict | str:
     Returns:
         datatype (dict): datatype information
     """
-    if "valueExpr" in constraint:
-        # datatype constraints
-        if "datatype" in constraint["valueExpr"]:
-            # string
-            if constraint["valueExpr"]["datatype"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString":
-                return {
-                    "type": "NodeConstraint",
-                    "datatype": "http://www.w3.org/2001/XMLSchema#string"
-                }
-            # decimal
-            elif constraint["valueExpr"]["datatype"] == "http://www.w3.org/2001/XMLSchema#float":
-                return {
-                    "type": "NodeConstraint",
-                    "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
-                }
-            else:
+    if syntax == "SHACL":
+            if "http://www.w3.org/ns/shacl#datatype" in constraint:
+
+                if constraint["http://www.w3.org/ns/shacl#datatype"][0]["@id"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString":
+                    return {
+                        "type": "NodeConstraint",
+                        "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                # decimal
+                elif constraint["http://www.w3.org/ns/shacl#datatype"][0]["@id"] == "http://www.w3.org/2001/XMLSchema#float":
+                    return {
+                        "type": "NodeConstraint",
+                        "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+                    }
+                else:
+                    return {
+                        "type": "NodeConstraint",
+                        "datatype": constraint["http://www.w3.org/ns/shacl#datatype"][0]["@id"]
+                    }
+            # node kind constraints
+            elif "http://www.w3.org/ns/shacl#nodeKind" in constraint: #####@celian NOT SURE ABOUT IT
                 return constraint["valueExpr"]
-        # node kind constraints
-        elif "nodeKind" in constraint["valueExpr"]:
-            return constraint["valueExpr"]
-        # value set or shape reference
-        else:
-            return {"type": "NodeConstraint", "nodeKind": "iri"}
+            # value set or shape reference
+            else:
+                return {"type": "NodeConstraint", "nodeKind": constraint["http://www.w3.org/ns/shacl#nodeKind"][0]["@id"]}
+
     else:
-        # anything
-        return "."
+        if "valueExpr" in constraint:
+            # datatype constraints
+            if "datatype" in constraint["valueExpr"]:
+                # string
+                if constraint["valueExpr"]["datatype"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString":
+                    return {
+                        "type": "NodeConstraint",
+                        "datatype": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                # decimal
+                elif constraint["valueExpr"]["datatype"] == "http://www.w3.org/2001/XMLSchema#float":
+                    return {
+                        "type": "NodeConstraint",
+                        "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+                    }
+                else:
+                    return constraint["valueExpr"]
+            # node kind constraints
+            elif "nodeKind" in constraint["valueExpr"]:
+                return constraint["valueExpr"]
+            # value set or shape reference
+            else:
+                return {"type": "NodeConstraint", "nodeKind": "iri"}
+        else:
+            # anything
+            return "."
 
 
-def datatype_match(y_true: dict, y_pred: dict) -> bool:
+def datatype_match(y_true: dict, y_pred: dict, syntax:str) -> bool:
     """ datatype match
 
     Args:
@@ -232,13 +310,13 @@ def datatype_match(y_true: dict, y_pred: dict) -> bool:
     Returns:
         True if datatype of constraints match, otherwise False
     """
-    y_true_datatype = get_constraint_datatype(y_true)
-    y_pred_datatype = get_constraint_datatype(y_pred)
+    y_true_datatype = get_constraint_datatype(y_true,syntax)
+    y_pred_datatype = get_constraint_datatype(y_pred,syntax)
 
     return y_true_datatype == y_pred_datatype
 
 
-def loosened_cardinality_match(y_true: dict, y_pred: dict) -> bool:
+def loosened_cardinality_match(y_true: dict, y_pred: dict, syntax:str) -> bool:
     """ relax the evaluation by allowing broader matches on cardinality
 
     Args:
@@ -250,10 +328,18 @@ def loosened_cardinality_match(y_true: dict, y_pred: dict) -> bool:
         True if y_pred_min <= y_true_min <= y_true_max <= y_pred_max
         False otherwise
     """
-    y_true_min = y_true.get("min", 1)
-    y_true_max = y_true.get("max", 1) if y_true.get("max", 1) != -1 else math.inf
-    y_pred_min = y_pred.get("min", 1)
-    y_pred_max = y_pred.get("max", 1) if y_pred.get("max", 1) != -1 else math.inf
+
+    if syntax == "SHACL":
+        ##### @celian why  if y_pred.get("max", 1) != -1 else math.inf ?
+        y_true_min = y_true.get('http://www.w3.org/ns/shacl#minCount',{"@value":0}).get("@value")
+        y_true_max = y_true.get('http://www.w3.org/ns/shacl#maxCount',{"@value":math.inf}).get("@value")
+        y_pred_min = y_pred.get('http://www.w3.org/ns/shacl#minCount',{"@value":0}).get("@value")
+        y_pred_max = y_pred.get('http://www.w3.org/ns/shacl#maxCount',{"@value":math.inf}).get("@value")
+    else:
+        y_true_min = y_true.get("min", 1)
+        y_true_max = y_true.get("max", 1) if y_true.get("max", 1) != -1 else math.inf
+        y_pred_min = y_pred.get("min", 1)
+        y_pred_max = y_pred.get("max", 1) if y_pred.get("max", 1) != -1 else math.inf
 
     if y_true_min == 0 and y_true_max == 0:
         return y_pred_min == 0 and y_pred_max == 0
@@ -263,6 +349,7 @@ def loosened_cardinality_match(y_true: dict, y_pred: dict) -> bool:
 
 def constraint_match(
         dataset: str,
+        syntax: str,
         y_true: dict,
         y_pred: dict,
         node_constraint_matching_level: str = "exact",
@@ -282,23 +369,23 @@ def constraint_match(
     Returns:
         True if constraint match at the given matching level, otherwise False
     """
-    if predicate_match(y_true, y_pred):
+    if predicate_match(y_true, y_pred,syntax):
         # node constraint
-        if node_constraint_matching_level == "exact":
-            node_constraint_matching = node_constraint_match(y_true, y_pred)
+        if node_constraint_matching_level == "exact": #@ celian just done this one 
+            node_constraint_matching = node_constraint_match(y_true, y_pred, syntax)
         elif node_constraint_matching_level == "approximate":
             node_constraint_matching = approximate_class_constraint_match(
-                dataset, y_true, y_pred, value_type_const_classes
+                dataset, y_true, y_pred, syntax, value_type_const_classes
             )
         elif node_constraint_matching_level == "datatype":
-            node_constraint_matching = datatype_match(y_true, y_pred)
+            node_constraint_matching = datatype_match(y_true, y_pred, syntax)
         else:
             raise NotImplementedError("'node_constraint_matching_level' must be either 'exact', 'approximate', 'datatype'")
         # cardinality
         if cardinality_matching_level == "exact":
-            cardinality_matching = cardinality_match(y_true, y_pred)
+            cardinality_matching = cardinality_match(y_true, y_pred, syntax)
         elif cardinality_matching_level == "loosened":
-            cardinality_matching = loosened_cardinality_match(y_true, y_pred)
+            cardinality_matching = loosened_cardinality_match(y_true, y_pred, syntax)
         else:
             raise NotImplementedError(f"'cardinality_matching_level' must be either 'exact', 'loosened'")
         return node_constraint_matching and cardinality_matching
@@ -308,6 +395,7 @@ def constraint_match(
 
 def count_true_positives(
         dataset: str,
+        syntax: str,
         y_true: list[dict],
         y_pred: list[dict],
         node_constraint_matching_level: str = "exact",
@@ -328,30 +416,55 @@ def count_true_positives(
         number of true positives
         list of true positives
     """
-    true_positives = list()
-    for true_constraint in y_true:
-        for pred_constraint in y_pred:
-            if value_type_constraints:
-                predicate_id = pred_constraint.get("predicate").split("/")[-1]
-                value_type_const_classes = value_type_constraints.get(predicate_id, {}).get("value_type_constraint", [])
-                value_type_const_classes = [item["url"] for item in value_type_const_classes]
-            else:
-                value_type_const_classes = None
-            if constraint_match(
-                    dataset=dataset,
-                    y_true=true_constraint,
-                    y_pred=pred_constraint,
-                    node_constraint_matching_level=node_constraint_matching_level,
-                    cardinality_matching_level=cardinality_matching_level,
-                    value_type_const_classes=value_type_const_classes
-            ):
-                true_positives.append(true_constraint)
+    if syntax == "SHACL":
+        true_positives = list()
+        for true_constraint in y_true:
+            for pred_constraint in y_pred:
+                ###############@celian CHECK LATER
+                if value_type_constraints:
+                    predicate_id = pred_constraint.get("predicate").split("/")[-1]
+                    value_type_const_classes = value_type_constraints.get(predicate_id, {}).get("value_type_constraint",
+                                                                                                [])
+                    value_type_const_classes = [item["url"] for item in value_type_const_classes]
+                else:
+                    value_type_const_classes = None
+                if constraint_match(
+                        dataset=dataset,
+                        syntax=syntax,
+                        y_true=true_constraint,
+                        y_pred=pred_constraint,
+                        node_constraint_matching_level=node_constraint_matching_level,
+                        cardinality_matching_level=cardinality_matching_level,
+                        value_type_const_classes=value_type_const_classes
+                ):
+                    true_positives.append(true_constraint)
+        print(true_positives)
+    else:
+        true_positives = list()
+        for true_constraint in y_true:
+            for pred_constraint in y_pred:
+                if value_type_constraints:
+                    predicate_id = pred_constraint.get("predicate").split("/")[-1]
+                    value_type_const_classes = value_type_constraints.get(predicate_id, {}).get("value_type_constraint", [])
+                    value_type_const_classes = [item["url"] for item in value_type_const_classes]
+                else:
+                    value_type_const_classes = None
+                if constraint_match(
+                        dataset=dataset,
+                        y_true=true_constraint,
+                        y_pred=pred_constraint,
+                        node_constraint_matching_level=node_constraint_matching_level,
+                        cardinality_matching_level=cardinality_matching_level,
+                        value_type_const_classes=value_type_const_classes
+                ):
+                    true_positives.append(true_constraint)
 
     return len(true_positives), true_positives
 
 
 def evaluate(
         dataset: str,
+        syntax: str,
         class_urls: list[str],
         class_labels: list[str],
         ground_truth_dir: str | Path,
@@ -385,32 +498,52 @@ def evaluate(
         else:
             shape_id = class_label
         logger.info(f"Evaluating shape '{shape_id}' in class '{class_id}'")
+        if syntax == "SHACL":
+            # extract ground truth constraints
+            true_shacl_path = os.path.join(ground_truth_dir, f"{class_id}.ttl")
+            true_shacl_text = Path(true_shacl_path).read_text()
+            true_constraints = extract_shacl_constraints(shacl_text=true_shacl_text)
 
-        # extract ground truth constraints
-        true_shex_path = os.path.join(ground_truth_dir, f"{class_id}.shex")
-        true_shexc_text = Path(true_shex_path).read_text()
-        true_constraints = extract_constraints(shexc_text=true_shexc_text)
+            # extract predicted constraints
+            pred_shacl_path = os.path.join(predicted_dir, f"{class_id}.ttl")
+            if not os.path.exists(pred_shacl_path):
+                logger.warning(f"File '{pred_shacl_path}' does not exist")
+                continue
+            pred_shacl_text = Path(pred_shacl_path).read_text()
+            pred_constraints = extract_shacl_constraints(shacl_text=pred_shacl_text)
+            if not pred_constraints:
+                logger.warning(f"Unable to parse shacl file '{pred_shacl_text}'")
 
-        # extract predicted constraints
-        pred_shex_path = os.path.join(predicted_dir, f"{class_id}.shex")
-        if not os.path.exists(pred_shex_path):
-            logger.warning(f"File '{pred_shex_path}' does not exist")
-            continue
-        pred_shexc_text = Path(pred_shex_path).read_text()
-        pred_constraints = extract_constraints(shexc_text=pred_shexc_text)
-        if not pred_constraints:
-            logger.warning(f"Unable to parse shex file '{pred_shex_path}'")
+
+
+        else:
+            # extract ground truth constraints
+            true_shex_path = os.path.join(ground_truth_dir, f"{class_id}.shex")
+            true_shexc_text = Path(true_shex_path).read_text()
+            true_constraints = extract_shex_constraints(shexc_text=true_shexc_text)
+
+            # extract predicted constraints
+            pred_shex_path = os.path.join(predicted_dir, f"{class_id}.shex")
+            if not os.path.exists(pred_shex_path):
+                logger.warning(f"File '{pred_shex_path}' does not exist")
+                continue
+            pred_shexc_text = Path(pred_shex_path).read_text()
+            pred_constraints = extract_shex_constraints(shexc_text=pred_shexc_text)
+            if not pred_constraints:
+                logger.warning(f"Unable to parse shex file '{pred_shex_path}'")
 
         # count true positives
         num_true, num_pred = len(true_constraints), len(pred_constraints)
         num_true_positives, true_positives = count_true_positives(
             dataset=dataset,
+            syntax=syntax,
             y_true=true_constraints,
             y_pred=pred_constraints,
             node_constraint_matching_level=node_constraint_matching_level,
             cardinality_matching_level=cardinality_matching_level,
             value_type_constraints=value_type_constraints
         )
+        print("YAHOU")
         total_true_positives += num_true_positives
         total_true += num_true
         total_pred += num_pred
