@@ -758,10 +758,16 @@ def query_property_information(
         if object_class_distribution:
             property_info["object_class_distribution"] = object_class_distribution
 
+    # class label (available for all datasets)
+    property_info["class_label"] = class_label
+
+    # predicate label (via rdfs:label lookup for all datasets)
+    predicate_label = query_item_label(predicate_uri, dataset, endpoint_url)
+    if predicate_label:
+        property_info["predicate_label"] = predicate_label
+
     # Wikidata-specific schema information
     if dataset == "wes":
-        # class label
-        property_info["class_label"] = class_label
         # class description
         class_description = query_item_description(class_uri, dataset, endpoint_url)
         if class_description:
@@ -771,6 +777,7 @@ def query_property_information(
             graph_info = json.loads(Path(graph_info_path).read_text())
             graph_entry = graph_info[predicate_id]
 
+            # override with richer label/description from graph info if available
             if graph_entry.get("label", None):
                 property_info["predicate_label"] = graph_entry["label"]
             if graph_entry.get("description", None):
