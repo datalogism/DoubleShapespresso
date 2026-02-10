@@ -52,6 +52,13 @@ def main():
         required=False,
         help='Cardinality matching level',
     )
+    parser.add_argument(
+        '--endpoint_url',
+        type=str,
+        default='http://localhost:1234/api/endpoint/sparql',
+        required=False,
+        help='SPARQL endpoint URL (used for approximate matching)',
+    )
     metrics = parser.add_mutually_exclusive_group(required=True)
     metrics.add_argument(
         "--classification",
@@ -82,7 +89,8 @@ def main():
                 predicted_dir=args.predictions_dir,
                 node_constraint_matching_level=args.node_constraint_matching_level,
                 cardinality_matching_level=args.cardinality_matching_level,
-                value_type_constraints=value_type_constraints
+                value_type_constraints=value_type_constraints,
+                endpoint_url=args.endpoint_url
             )
         else:
             macro_precision, macro_recall, macro_f1_score = evaluate(
@@ -94,12 +102,14 @@ def main():
                 predicted_dir=args.predictions_dir,
                 node_constraint_matching_level=args.node_constraint_matching_level,
                 cardinality_matching_level=args.cardinality_matching_level,
-                value_type_constraints=None
+                value_type_constraints=None,
+                endpoint_url=args.endpoint_url
             )
             print(macro_precision, macro_recall, macro_f1_score)
     else:
         ted = evaluate_ted(
             dataset=args.dataset,
+            syntax=args.syntax,
             class_urls=class_uris,
             class_labels=class_labels,
             ground_truth_dir=f"dataset/{args.dataset}",

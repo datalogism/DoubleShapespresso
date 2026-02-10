@@ -300,18 +300,10 @@ def global_generation_workflow(
             num_instances=num_instances,
             graph_info_path=graph_info_path,
         )
-        print("###############")
-        print(prompt)
-
-        print("###############")
         response = model.structured_response(
             prompt=prompt,
             response_model=Cardinality,
         )
-        print("#########################")
-        print(response)
-        print("#########################")
-
         min_value, max_value = response.min, response.max
         logger.info(f"Predicted cardinality for ({class_uri} {predicate_uri}): min={min_value}, max={max_value}")
 
@@ -325,13 +317,9 @@ def global_generation_workflow(
             instance_of_uri=instance_of_uri,
             endpoint_url=endpoint_url
         )
-        print(datatype)
-
         start_shape_id = "".join(
             [word.capitalize() for word in class_label.split()]) if dataset == "wes" else class_label
         if syntax == "SHACL":
-            print("-",class_uri)
-            print("-",predicate_uri)
             current_id=fct.prefix_replace(str(class_uri))+"_"+fct.prefix_replace(str(predicate_uri))
             if datatype != "IRI":
                     if(max_value!=-1):
@@ -352,7 +340,7 @@ def global_generation_workflow(
                     triple_constraints.append(triple_constraint)
 
             else:
-                print("#######################TODO")
+                # Generate node constraint for IRI values using LLM
                 prompt = construct_node_constraint_prompt(
                     class_uri=class_uri,
                     class_label=class_label,
@@ -367,10 +355,6 @@ def global_generation_workflow(
                     num_class_distribution=num_class_distribution,
                     graph_info_path=graph_info_path,
                 )
-                print("XXXXXXXXXXX")
-                print(prompt)
-                print("XXXXXXXXXXX")
-
                 response = model.structured_response(prompt=prompt, response_model=NodeConstraintSHACL)
                 if response.sh_class != None:
                     if (max_value != -1):
@@ -515,8 +499,6 @@ def global_generation_workflow(
             "sh:targetClass": class_uri,
             "sh:property": triple_constraints
         }
-        print("#####################")
-        print(jsonld_shape)
         jsonld_txt=json.dumps(jsonld_shape)
         g = Graph()
         g.parse(data=jsonld_txt, format='json-ld')

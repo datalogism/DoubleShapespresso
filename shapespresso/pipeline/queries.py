@@ -266,7 +266,6 @@ def query_object_class_distribution(
             GROUP BY ?objectClass ?objectClassLabel
             ORDER BY DESC(?count)
             """
-    print("HERRRE")
     results = endpoint_sparql_query(query, endpoint_url)
     results = [
         {
@@ -365,7 +364,6 @@ def query_instances_predicate_count(
         results = endpoint_sparql_query(query, endpoint_url)
         instances = results[:num_instances]
     elif dataset == "dbpedia":
-        print("INYEAH")
         query = f"""
                 SELECT DISTINCT ?subject (COUNT(DISTINCT ?predicate) AS ?count)
                 WHERE {{
@@ -468,7 +466,6 @@ def query_triple_examples(
         instance_uris = [result["subject"] for result in results]
         instance_uris = sorted(instance_uris, key=lambda x: (len(x), x.lower()))[:num_instances]
     elif dataset in ["yagos","dbpedia"]:  # sort_by = 'predicate_count'
-        print("query_triple_examples")
         query = f"""
                 SELECT DISTINCT ?subject (COUNT(DISTINCT ?predicate) AS ?count)
                 WHERE {{
@@ -514,8 +511,6 @@ def query_triple_examples(
             results = endpoint_sparql_query(query, endpoint_url)
             triple_examples.extend(concat_object_values(results, True))
         elif dataset == "yagos":
-
-            print("query_triple_examples")
             query = f"""
                     SELECT DISTINCT ?subject ?subjectLabel ?predicate ?propertyLabel ?object ?objectLabel ?datatype
                     WHERE {{

@@ -2,7 +2,6 @@ import re
 import json
 from pathlib import Path
 prefix_map = json.loads(Path("resources/prefix_map.json").read_text())
-print(prefix_map)
 def prefix_replace(data):
     #print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
     str_data=str(data)

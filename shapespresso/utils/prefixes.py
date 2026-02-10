@@ -18,6 +18,11 @@ class NamespaceRegistry:
         "wdt": "http://www.wikidata.org/prop/direct/",
         "wikibase": "http://wikiba.se/ontology#",
         "bd": "http://www.bigdata.com/rdf#",
+        "dbo": "http://dbpedia.org/ontology/",
+        "dbr": "http://dbpedia.org/resource/",
+        "dbp": "http://dbpedia.org/property/",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "sh": "http://www.w3.org/ns/shacl#",
     }
 
     def __init__(self, custom_namespaces: dict[str, str] = None):

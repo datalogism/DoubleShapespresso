@@ -51,7 +51,7 @@ def query_local_information(
         if dataset == "wes" and graph_info_path:
          #   print("IN0")
             logger.info("Load 'predicate_count' sorted entities")
-            instances = json.loads(Path(graph_info_path).read_text())[class_uri][:num_instances]
+            instances = json.loads(Path(graph_info_path).read_text(encoding="utf-8"))[class_uri][:num_instances]
         else:
           #  print("IN1")
             instances = query_instances_predicate_count(
@@ -353,10 +353,10 @@ def load_few_shot_prompt(
     elif mode == "global":
 
         if (syntax == "SHACL"):
-            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
             few_shot_examples = fct.unflatten_toml(few_shot_examples)
         else:
-            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+            few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
 
         for i in range(len(few_shot_examples) // 2):
             example = json.dumps(few_shot_examples[f"example_{i}"], ensure_ascii=False, indent=2)
@@ -366,7 +366,6 @@ def load_few_shot_prompt(
             if (syntax == "ShEx"):
                 answer = json.loads(few_shot_examples[f"answer_{i}"]["shexj"])
             elif (syntax == "SHACL"):
-                print(few_shot_examples[f"answer_{i}"])
                 answer = ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
 
             if answer_keys:
@@ -384,7 +383,7 @@ def load_few_shot_prompt(
             ])
 
     elif mode == "triples":
-        few_shot_shex_example = Path(few_shot_example_path).read_text()
+        few_shot_shex_example = Path(few_shot_example_path).read_text(encoding="utf-8")
         few_shot_triple_examples = list()
         predicates = query_property_list(
             class_uri=class_uri,
@@ -503,17 +502,16 @@ def construct_cardinality_prompt(
             "is not applicable to the class, set both minimum and maximum to 0."
         )
     if(syntax== "SHACL"):
-        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
         few_shot_examples= fct.unflatten_toml(few_shot_examples)
     else:
-        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
     prompt = [
         {
             "role": "system",
             "content": system_content,
         }
     ]
-    print(few_shot_examples)
     if few_shot:
         for i in range(len(few_shot_examples) // 2):
             predicate_info = few_shot_examples[f"example_{i}"]
@@ -531,10 +529,7 @@ def construct_cardinality_prompt(
                     "max": shexj_json.get("triple_constraint", {"max": 0}).get("max", 1),
                 }
             elif(syntax=="SHACL"):
-                print(few_shot_examples[f"answer_{i}"]["shaclj"])
                 shaclj_json=ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
-                print("HEY")
-                print(shaclj_json)
                 #shaclj_json = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
                 cardinality = {
                     "min": shaclj_json["sh:minCount"],
@@ -642,10 +637,10 @@ def construct_node_constraint_prompt(
 
 
     if(syntax== "SHACL"):
-        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
         few_shot_examples= fct.unflatten_toml(few_shot_examples)
     else:
-        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text())
+        few_shot_examples = tomllib.loads(Path(few_shot_example_path).read_text(encoding="utf-8"))
 
     prompt = [
         {
@@ -690,9 +685,6 @@ def construct_node_constraint_prompt(
                 #node_constraint = json.loads(few_shot_examples[f"answer_{i}"]["shaclj"])
 
                 node_constraint=ast.literal_eval(few_shot_examples[f"answer_{i}"]["shaclj"])
-
-                print("XXXXXXXXXXXXXXXXXXXXXXXXX")
-                print(node_constraint)
 
             prompt.extend([
                 {
@@ -852,7 +844,7 @@ def construct_prompt(
         # reuse prompt
         if load_prompt_path:
             logger.info(f"Load prompts from {load_prompt_path}")
-            json_text = Path(load_prompt_path).read_text()
+            json_text = Path(load_prompt_path).read_text(encoding="utf-8")
             prompt = json.loads(json_text)
         else:
             if few_shot:
@@ -905,7 +897,7 @@ def construct_prompt(
 
         if save_prompt_path:
             logger.info(f"Save prompts to {save_prompt_path}")
-            Path(save_prompt_path).write_text(json.dumps(prompt, ensure_ascii=False, indent=2))
+            Path(save_prompt_path).write_text(json.dumps(prompt, ensure_ascii=False, indent=2),encoding='utf-8')
 
         return prompt
 
@@ -929,7 +921,7 @@ def construct_prompt(
 
         if load_prompt_path:
             logger.info(f"Load prompts from {load_prompt_path}")
-            json_text = Path(load_prompt_path).read_text()
+            json_text = Path(load_prompt_path).read_text(encoding="utf-8")
             global_prompts = json.loads(json_text)
             for global_prompt in global_prompts:
                 prompts.append(prompt.copy())
@@ -958,17 +950,16 @@ def construct_prompt(
                 }
                 prompts[-1].append(global_prompt)
                 global_prompts.append(global_prompt)
-        print(global_prompts)
         if save_prompt_path:
             logger.info(f"Save prompts to {save_prompt_path}")
-            Path(save_prompt_path).write_text(json.dumps(global_prompts, ensure_ascii=False, indent=2))
+            Path(save_prompt_path).write_text(json.dumps(global_prompts, ensure_ascii=False, indent=2),encoding='utf-8')
 
         return prompts
 
     elif mode == "triples":
         if load_prompt_path:
             logger.info(f"Load prompts from {load_prompt_path}")
-            json_text = Path(load_prompt_path).read_text()
+            json_text = Path(load_prompt_path).read_text(encoding="utf-8")
             prompt = json.loads(json_text)
         else:
             if few_shot:
@@ -1034,7 +1025,7 @@ def construct_prompt(
 
             if save_prompt_path:
                 logger.info(f"Save prompts to {save_prompt_path}")
-                Path(save_prompt_path).write_text(json.dumps(prompt, ensure_ascii=False, indent=2))
+                Path(save_prompt_path).write_text(json.dumps(prompt, ensure_ascii=False, indent=2),encoding='utf-8')
 
         return prompt
 
