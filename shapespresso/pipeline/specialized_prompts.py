@@ -84,6 +84,7 @@ def getPropertyType(idProp, shape_file, syntax):
 
         shacl_g = Graph()
         shacl_g.parse(shape_file)
+        # Query direct sh:class and sh:datatype
         get_prop = """
         SELECT ?dt ?obj
         WHERE {
@@ -99,6 +100,25 @@ def getPropertyType(idProp, shape_file, syntax):
                 res["data_type"] = str(row[0])
             if (row[1] is not None):
                 res["obj_type"] = str(row[1])
+
+        # Query sh:or classes (e.g., sh:class [ sh:or ( classA classB ) ])
+        get_or = """
+        SELECT ?orClass
+        WHERE {
+            ?s ?p ?o .
+            ?o sh:path <""" + idProp + """> .
+            {
+                ?o sh:or/rdf:rest*/rdf:first ?orClass .
+            } UNION {
+                ?o sh:class/sh:or/rdf:rest*/rdf:first ?orClass .
+            }
+        }"""
+        qres_or = shacl_g.query(get_or)
+        or_classes = [str(row[0]) for row in qres_or]
+        if or_classes:
+            res["obj_type"] = "sh:or"
+            res["or_classes"] = or_classes
+
         return res
 
     else:

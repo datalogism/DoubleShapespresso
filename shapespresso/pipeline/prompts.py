@@ -621,14 +621,14 @@ def construct_node_constraint_prompt(
         )
     elif(syntax=="SHACL"):
 
-        # "2. Value constraint: Restrict the value to a specific set of items.\n"
-        #or a list of classes
         system_content = (
             "You are a knowledge engineer specializing in writing SHACL shape. "
             "Given property information for a specific class, your task is to generate a specifc constraint only in JSON-LD. "
             "The constraint you may produce:\n"
-            "1. have a sh:class (most common): Specify that the object/value must belong to a particular class .\n"
-            "2. have a sh:datatype with the value \"sh:IRI\": Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
+            "1. have a sh:class (most common): Specify that the object/value must belong to a particular class.\n"
+            "2. have a sh:or with a list of sh:class values: When the object/value could belong to "
+            "multiple distinct classes (e.g., Organization or Person), use sh:or to list them.\n"
+            "3. have a sh:datatype with the value \"sh:IRI\": Indicate that the value must be an IRI, with no restrictions on which IRI.\n"
             "Focus solely on generating the appropriate node constraint for the provided property."
         )
 

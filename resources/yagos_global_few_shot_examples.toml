@@ -234,3 +234,46 @@ answer_6.shexj = """
 }
 """
 answer_6.shaclj = "{\"@id\": \"_:ScientistSameas\", \"sh:path\": \"owl:sameAs\", \"sh:minCount\": 0, \"sh:maxCount\": -1, \"sh:datatype\": \"sh:IRI\"}"
+example_7.class_uri = "http://yago-knowledge.org/resource/Scientist"
+example_7.predicate_uri = "http://schema.org/memberOf"
+example_7.triple_examples = [
+  "yago:Albert_Einstein schema:memberOf yago:Prussian_Academy_of_Sciences .",
+  "yago:Albert_Einstein schema:memberOf yago:Royal_Netherlands_Academy_of_Arts_and_Sciences .",
+  "yago:Dmitri_Mendeleev schema:memberOf yago:Saint_Petersburg_Academy_of_Sciences ."
+]
+example_7.frequency = "12.45% instance(s) in the class use the predicate"
+example_7.cardinality_distribution = """\
+  8.21% instances in the class have 1 object(s) when using the property, \
+  3.12% instances in the class have 2 object(s) when using the property, \
+  1.12% instances in the class have 3 object(s) when using the property\
+  """
+example_7.datatype_of_objects = "IRI"
+example_7.object_class_distribution = """\
+  42.00% of subjects have objects in class schema:Organization, \
+  31.00% of subjects have objects in class schema:EducationalOrganization, \
+  15.00% of subjects have objects in class schema:GovernmentOrganization\
+  """
+answer_7.shexj = """
+{
+  "triple_constraint": {
+    "type": "TripleConstraint",
+    "predicate": "http://schema.org/memberOf",
+    "valueExpr": "OrganizationShape",
+    "min": 0,
+    "max": -1
+  },
+  "value_shape": {
+     "type": "Shape",
+     "id": "OrganizationShape",
+     "extra": [
+       "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+     ],
+     "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+     "values": [
+       "http://schema.org/Organization",
+       "http://schema.org/EducationalOrganization"
+     ]
+  }
+}
+"""
+answer_7.shaclj = "{\"@id\": \"_:ScientistMemberof\", \"sh:path\": \"schema:memberOf\", \"sh:minCount\": 0, \"sh:maxCount\": -1, \"sh:or\": [{\"sh:class\": \"http://schema.org/Organization\"}, {\"sh:class\": \"http://schema.org/EducationalOrganization\"}]}"

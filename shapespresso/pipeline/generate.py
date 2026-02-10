@@ -356,41 +356,36 @@ def global_generation_workflow(
                     graph_info_path=graph_info_path,
                 )
                 response = model.structured_response(prompt=prompt, response_model=NodeConstraintSHACL)
-                if response.sh_class != None:
-                    if (max_value != -1):
-                        triple_constraint = {
-                            "@id": "_:" + current_id,
-                            "sh:path": predicate_uri,
-                            "sh:class": response.sh_class,
-                            "sh:minCount": min_value,
-                            "sh:maxCount": max_value
-                        }
-                    else:
-                        triple_constraint = {
-                            "@id": "_:" + current_id,
-                            "sh:path": predicate_uri,
-                            "sh:class": response.sh_class,
-                            "sh:minCount": min_value
-                        }
 
-                    triple_constraints.append(triple_constraint)
-                else:
-                    if (max_value != -1):
-                        triple_constraint = {
-                            "@id": "_:" + current_id,
-                            "sh:path": predicate_uri,
-                            "sh:datatype": "sh:IRI",
-                            "sh:minCount": min_value,
-                            "sh:maxCount": max_value
-                        }
+                # Build base constraint with cardinality
+                triple_constraint = {
+                    "@id": "_:" + current_id,
+                    "sh:path": predicate_uri,
+                    "sh:minCount": min_value,
+                }
+                if max_value != -1:
+                    triple_constraint["sh:maxCount"] = max_value
+
+                # Determine node constraint type: sh:or > sh:class > sh:IRI fallback
+                if response.sh_or is not None and len(response.sh_or) > 0:
+                    or_items = []
+                    for item in response.sh_or:
+                        if isinstance(item, dict):
+                            cls = item.get("sh:class") or item.get("sh_class")
+                            if cls:
+                                or_items.append({"sh:class": cls})
+                        elif isinstance(item, str):
+                            or_items.append({"sh:class": item})
+                    if or_items:
+                        triple_constraint["sh:or"] = or_items
                     else:
-                        triple_constraint = {
-                            "@id": "_:" + current_id,
-                            "sh:path": predicate_uri,
-                            "sh:datatype": "sh:IRI",
-                            "sh:minCount": min_value
-                        }
-                    triple_constraints.append(triple_constraint)
+                        triple_constraint["sh:datatype"] = "sh:IRI"
+                elif response.sh_class is not None:
+                    triple_constraint["sh:class"] = response.sh_class
+                else:
+                    triple_constraint["sh:datatype"] = "sh:IRI"
+
+                triple_constraints.append(triple_constraint)
 
         else:
             if datatype != "IRI":
@@ -504,6 +499,7 @@ def global_generation_workflow(
                 "sh:class": {"@type": "@id"},
                 "sh:datatype": {"@type": "@id"},
                 "sh:nodeKind": {"@type": "@id"},
+                "sh:or": {"@container": "@list"},
             },
             "@id": start_shape_id,
             "@type": "sh:NodeShape",
