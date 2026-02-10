@@ -13,7 +13,14 @@ from shapespresso.metrics.utils import (
     get_shapes_dict,
     get_predicate_node_label,
     get_node_constraint_node_label,
-    get_cardinality_node_label
+    get_cardinality_node_label,
+    # SHACL-specific utilities
+    extract_shacl_constraints,
+    extract_shacl_node_shapes,
+    get_shacl_target_class,
+    get_shacl_predicate_node_label,
+    get_shacl_node_constraint_label,
+    get_shacl_cardinality_label
 )
 from shapespresso.parser import shexc_to_shexj
 
@@ -179,6 +186,128 @@ def transform_schema_to_tree(schema: dict, shape_id: str):
         return start_node
 
 
+def transform_shacl_to_graph(shacl_text: str, shape_id: str = None):
+    """Transform SHACL schema to NetworkX DiGraph.
+
+    Args:
+        shacl_text: SHACL schema in Turtle format
+        shape_id: Optional specific shape ID to transform
+
+    Returns:
+        Tuple of (root_node_id, NetworkX DiGraph)
+    """
+    node_shapes = extract_shacl_node_shapes(shacl_text)
+    if not node_shapes:
+        logger.warning("No NodeShapes found in SHACL schema")
+        return None, nx.DiGraph()
+
+    # Find the target shape
+    target_shape = None
+    if shape_id:
+        for ns in node_shapes:
+            ns_id = ns.get('@id', '')
+            if shape_id in ns_id:
+                target_shape = ns
+                break
+    if not target_shape:
+        target_shape = node_shapes[0]
+
+    root_id = target_shape.get('@id', 'UnknownShape')
+    target_class = get_shacl_target_class(target_shape)
+    root_label = target_class.split('/')[-1] if target_class else root_id.split('/')[-1]
+
+    schema_graph = nx.DiGraph()
+    schema_graph.add_node(root_label, label=root_label)
+
+    # Extract property constraints
+    property_shapes = extract_shacl_constraints(shacl_text, shape_id)
+
+    for prop in property_shapes:
+        # Predicate node
+        predicate_label = get_shacl_predicate_node_label(prop)
+        if not predicate_label:
+            continue
+
+        schema_graph.add_node(predicate_label, label=predicate_label)
+        schema_graph.add_edge(root_label, predicate_label, label=f"{root_label} {predicate_label}")
+
+        # Node constraint node
+        nc_label = get_shacl_node_constraint_label(prop)
+        schema_graph.add_node(nc_label, label=nc_label)
+        schema_graph.add_edge(predicate_label, nc_label, label=f"{predicate_label} {nc_label}")
+
+        # Cardinality node
+        card_label = get_shacl_cardinality_label(prop)
+        schema_graph.add_node(card_label, label=card_label)
+        schema_graph.add_edge(nc_label, card_label, label=f"{nc_label} {card_label}")
+
+    return root_label, schema_graph
+
+
+def transform_shacl_to_tree(shacl_text: str, shape_id: str = None) -> ShapeNode:
+    """Transform SHACL schema to ShapeNode tree for tree edit distance computation.
+
+    Args:
+        shacl_text: SHACL schema in Turtle format
+        shape_id: Optional specific shape ID to transform
+
+    Returns:
+        ShapeNode tree rooted at the target class
+    """
+    node_shapes = extract_shacl_node_shapes(shacl_text)
+    if not node_shapes:
+        logger.warning("No NodeShapes found in SHACL schema")
+        return ShapeNode("EmptyShape")
+
+    # Find the target shape
+    target_shape = None
+    if shape_id:
+        for ns in node_shapes:
+            ns_id = ns.get('@id', '')
+            target_class = get_shacl_target_class(ns)
+            # Match by shape ID or target class
+            if shape_id in ns_id or (target_class and shape_id in target_class):
+                target_shape = ns
+                break
+    if not target_shape:
+        target_shape = node_shapes[0]
+
+    # Determine root label
+    target_class = get_shacl_target_class(target_shape)
+    if target_class:
+        root_label = target_class.split('/')[-1]
+    else:
+        root_label = target_shape.get('@id', 'UnknownShape').split('/')[-1]
+
+    root_node = ShapeNode(root_label)
+
+    # Extract property constraints
+    property_shapes = extract_shacl_constraints(shacl_text, shape_id)
+
+    for prop in property_shapes:
+        # Predicate node
+        predicate_label = get_shacl_predicate_node_label(prop)
+        if not predicate_label:
+            continue
+
+        # Node constraint node
+        nc_label = get_shacl_node_constraint_label(prop)
+
+        # Cardinality node
+        card_label = get_shacl_cardinality_label(prop)
+
+        # Build constraint subtree: predicate -> node_constraint -> cardinality
+        constraint_node = (
+            ShapeNode(predicate_label)
+            .add_kid(ShapeNode(nc_label)
+                     .add_kid(ShapeNode(card_label))
+                     )
+        )
+        root_node.add_kid(constraint_node)
+
+    return root_node
+
+
 def plot_schema_graph(schema_graph):
     """ plot schema graph in tree layout
     """
@@ -238,24 +367,31 @@ def compute_tree_edit_distance(tree_1, tree_2) -> float:
 
 def evaluate_ted(
         dataset: str,
+        syntax: str,
         class_urls: list[str],
         class_labels: list[str],
         ground_truth_dir: str | Path,
         predicted_dir: str | Path
 ) -> float:
-    """ evaluate functions based on similarity metrics
+    """Evaluate schemas based on tree edit distance similarity metrics.
+
+    Supports both ShEx and SHACL syntax.
 
     Args:
-        dataset (str): name of dataset
-        class_urls (list[str]): list of class urls to evaluate
-        class_labels (list[str]): list of class labels
-        ground_truth_dir (str | Path): path to ground truth schema directory
-        predicted_dir (str | Path): path to predicted schema directory
+        dataset: Name of dataset (wes, yagos, dbpedia)
+        syntax: Schema syntax ("ShEx" or "SHACL")
+        class_urls: List of class URLs to evaluate
+        class_labels: List of class labels
+        ground_truth_dir: Path to ground truth schema directory
+        predicted_dir: Path to predicted schema directory
 
     Returns:
-        avg_ged (float): average ged
+        Average tree edit distance
     """
     teds, normalized_teds = list(), list()
+
+    # Determine file extension based on syntax
+    file_ext = ".shex" if syntax == "ShEx" else ".ttl"
 
     for class_url, class_label in zip(class_urls[:], class_labels[:]):
         class_id = class_url.split("/")[-1]
@@ -263,35 +399,183 @@ def evaluate_ted(
             shape_id = "".join([word.capitalize() for word in class_label.split()])
         else:
             shape_id = class_label
-        logger.info(f"Evaluating shape '{shape_id}' in class '{class_id}'")
+        logger.info(f"Evaluating shape '{shape_id}' in class '{class_id}' (syntax: {syntax})")
 
-        true_shex_path = os.path.join(ground_truth_dir, f"{class_id}.shex")
-        true_shexc_text = Path(true_shex_path).read_text()
-        true_shexj_text, _, _, _ = shexc_to_shexj(true_shexc_text)
-        true_shexj_json = json.loads(true_shexj_text)
-        true_schema_tree = transform_schema_to_tree(schema=true_shexj_json, shape_id=shape_id)
-
-        pred_shex_path = os.path.join(predicted_dir, f"{class_id}.shex")
-        if not os.path.exists(pred_shex_path):
-            logger.warning(f"File '{pred_shex_path}' does not exist!")
+        # Ground truth path
+        true_path = os.path.join(ground_truth_dir, f"{class_id}{file_ext}")
+        if not os.path.exists(true_path):
+            # Try alternative naming for SHACL (e.g., ShapeNameShapeTXT2KG_clean.ttl)
+            if syntax == "SHACL":
+                alt_patterns = [
+                    f"{shape_id}ShapeTXT2KG_clean.ttl",
+                    f"{shape_id}Shape.ttl",
+                    f"{shape_id}.ttl",
+                    f"{class_id}Shape.ttl"
+                ]
+                for pattern in alt_patterns:
+                    alt_path = os.path.join(ground_truth_dir, pattern)
+                    if os.path.exists(alt_path):
+                        true_path = alt_path
+                        break
+        if not os.path.exists(true_path):
+            logger.warning(f"Ground truth file not found for '{class_id}'")
             continue
-        pred_shexc_text = Path(pred_shex_path).read_text()
-        pred_shexj_text, _, _, _ = shexc_to_shexj(pred_shexc_text)
-        pred_shexj_json = json.loads(pred_shexj_text)
-        pred_schema_tree = transform_schema_to_tree(schema=pred_shexj_json, shape_id=shape_id)
 
+        # Predicted path
+        pred_path = os.path.join(predicted_dir, f"{class_id}{file_ext}")
+        if not os.path.exists(pred_path):
+            # Try alternative naming for SHACL
+            if syntax == "SHACL":
+                alt_patterns = [
+                    f"{shape_id}.ttl",
+                    f"{shape_id}Shape.ttl",
+                    f"{class_id}.ttl"
+                ]
+                for pattern in alt_patterns:
+                    alt_path = os.path.join(predicted_dir, pattern)
+                    if os.path.exists(alt_path):
+                        pred_path = alt_path
+                        break
+        if not os.path.exists(pred_path):
+            logger.warning(f"Predicted file '{pred_path}' does not exist!")
+            continue
+
+        # Transform schemas to trees based on syntax
+        if syntax == "ShEx":
+            # ShEx processing
+            true_shexc_text = Path(true_path).read_text()
+            true_shexj_text, _, _, _ = shexc_to_shexj(true_shexc_text)
+            if not true_shexj_text:
+                logger.warning(f"Failed to parse ground truth ShEx for '{class_id}'")
+                continue
+            true_shexj_json = json.loads(true_shexj_text)
+            true_schema_tree = transform_schema_to_tree(schema=true_shexj_json, shape_id=shape_id)
+
+            pred_shexc_text = Path(pred_path).read_text()
+            pred_shexj_text, _, _, _ = shexc_to_shexj(pred_shexc_text)
+            if not pred_shexj_text:
+                logger.warning(f"Failed to parse predicted ShEx for '{class_id}'")
+                continue
+            pred_shexj_json = json.loads(pred_shexj_text)
+            pred_schema_tree = transform_schema_to_tree(schema=pred_shexj_json, shape_id=shape_id)
+
+        else:
+            # SHACL processing
+            true_shacl_text = Path(true_path).read_text()
+            true_schema_tree = transform_shacl_to_tree(shacl_text=true_shacl_text, shape_id=shape_id)
+
+            pred_shacl_text = Path(pred_path).read_text()
+            pred_schema_tree = transform_shacl_to_tree(shacl_text=pred_shacl_text, shape_id=shape_id)
+
+        # Compute tree edit distance
         ted = compute_tree_edit_distance(true_schema_tree, pred_schema_tree)
-        # normalized by ground truth tree size
-        normalized_ted = ted / (3 * len(true_schema_tree))
+
+        # Normalize by ground truth tree size (each constraint has 3 nodes: predicate, node_constraint, cardinality)
+        tree_size = len(true_schema_tree) if len(true_schema_tree) > 0 else 1
+        normalized_ted = ted / (3 * tree_size)
+
         logger.info(
-            f"Class: {class_id} | TED: {ted} | Ground Truth Tree Size: {len(true_schema_tree)} | Normalized TED: {normalized_ted:.3f}"
+            f"Class: {class_id} | TED: {ted} | Ground Truth Tree Size: {tree_size} | Normalized TED: {normalized_ted:.3f}"
         )
         teds.append(ted)
         normalized_teds.append(normalized_ted)
 
+    if not teds:
+        logger.warning("No schemas could be evaluated")
+        return 0.0
+
     avg_ted = sum(teds) / len(teds)
     avg_normalized_ted = sum(normalized_teds) / len(normalized_teds)
-    logger.info(f"Average TED (over {len(teds)} schema): {avg_ted:.3f}")
-    logger.info(f"Normalized Average TED (over {len(normalized_teds)} schema): {avg_normalized_ted:.3f}")
+    logger.info(f"Average TED (over {len(teds)} schemas): {avg_ted:.3f}")
+    logger.info(f"Normalized Average TED (over {len(normalized_teds)} schemas): {avg_normalized_ted:.3f}")
 
     return avg_ted
+
+
+def evaluate_shacl_ted(
+        class_urls: list[str],
+        class_labels: list[str],
+        ground_truth_dir: str | Path,
+        predicted_dir: str | Path,
+        dataset: str = "dbpedia"
+) -> tuple[float, float]:
+    """Convenience function to evaluate SHACL schemas using tree edit distance.
+
+    Args:
+        class_urls: List of class URLs to evaluate
+        class_labels: List of class labels
+        ground_truth_dir: Path to ground truth SHACL directory
+        predicted_dir: Path to predicted SHACL directory
+        dataset: Dataset name (default: dbpedia)
+
+    Returns:
+        Tuple of (average TED, average normalized TED)
+    """
+    teds, normalized_teds = [], []
+
+    for class_url, class_label in zip(class_urls, class_labels):
+        class_id = class_url.split("/")[-1]
+        shape_id = class_label
+
+        logger.info(f"Evaluating SHACL shape '{shape_id}' for class '{class_id}'")
+
+        # Find ground truth file
+        true_path = None
+        possible_true_paths = [
+            os.path.join(ground_truth_dir, f"{shape_id}ShapeTXT2KG_clean.ttl"),
+            os.path.join(ground_truth_dir, f"{shape_id}Shape.ttl"),
+            os.path.join(ground_truth_dir, f"{shape_id}.ttl"),
+            os.path.join(ground_truth_dir, f"{class_id}.ttl"),
+        ]
+        for p in possible_true_paths:
+            if os.path.exists(p):
+                true_path = p
+                break
+
+        if not true_path:
+            logger.warning(f"Ground truth SHACL not found for '{class_id}'")
+            continue
+
+        # Find predicted file
+        pred_path = None
+        possible_pred_paths = [
+            os.path.join(predicted_dir, f"{shape_id}.ttl"),
+            os.path.join(predicted_dir, f"{class_id}.ttl"),
+            os.path.join(predicted_dir, f"{shape_id}Shape.ttl"),
+        ]
+        for p in possible_pred_paths:
+            if os.path.exists(p):
+                pred_path = p
+                break
+
+        if not pred_path:
+            logger.warning(f"Predicted SHACL not found for '{class_id}'")
+            continue
+
+        # Transform to trees
+        true_shacl_text = Path(true_path).read_text()
+        true_tree = transform_shacl_to_tree(true_shacl_text, shape_id)
+
+        pred_shacl_text = Path(pred_path).read_text()
+        pred_tree = transform_shacl_to_tree(pred_shacl_text, shape_id)
+
+        # Compute TED
+        ted = compute_tree_edit_distance(true_tree, pred_tree)
+        tree_size = len(true_tree) if len(true_tree) > 0 else 1
+        normalized_ted = ted / (3 * tree_size)
+
+        logger.info(f"Class: {class_id} | TED: {ted} | Normalized: {normalized_ted:.3f}")
+        teds.append(ted)
+        normalized_teds.append(normalized_ted)
+
+    if not teds:
+        logger.warning("No SHACL schemas could be evaluated")
+        return 0.0, 0.0
+
+    avg_ted = sum(teds) / len(teds)
+    avg_normalized_ted = sum(normalized_teds) / len(normalized_teds)
+
+    logger.info(f"SHACL Average TED: {avg_ted:.3f}")
+    logger.info(f"SHACL Average Normalized TED: {avg_normalized_ted:.3f}")
+
+    return avg_ted, avg_normalized_ted

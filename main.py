@@ -3,12 +3,71 @@ import argparse
 from loguru import logger
 from pathlib import Path
 from datetime import datetime
+from typing import List, Tuple, Optional
 
 import pandas as pd
 
 from shapespresso.pipeline import construct_prompt, construct_perfect_input_prompt
 from shapespresso.pipeline import OpenAIModel, ClaudeModel, OllamaModel, LiquiAIModel
 from shapespresso.pipeline import local_generation_workflow, global_generation_workflow, agentic_generation_workflow
+
+
+def get_expected_output_path(task: str, syntax: str, output_dir: str, class_id: str) -> Path:
+    """Determine the expected output file path for a given task/syntax/class_id."""
+    output_dir = Path(output_dir)
+    if task in ("prompt", "test_prompt"):
+        return output_dir / f"{class_id}.json"
+    elif task in ("generate", "test_generate"):
+        ext = ".ttl" if syntax == "SHACL" else ".shex"
+        return output_dir / f"{class_id}{ext}"
+    else:
+        return output_dir / f"{class_id}.json"
+
+
+def resolve_shape_list(
+    class_uris: List[str],
+    class_labels: List[str],
+    shape_name: Optional[str] = None,
+    shape_dir: Optional[str] = None,
+) -> List[Tuple[str, str]]:
+    """Filter the class list based on --shape_name and --shape_dir.
+
+    Args:
+        class_uris: List of class URIs from the CSV.
+        class_labels: List of class labels from the CSV.
+        shape_name: If provided, keep only the shape matching this name.
+        shape_dir: If provided, keep only shapes with a file in this directory.
+
+    Returns:
+        Filtered list of (class_uri, class_label) pairs.
+    """
+    # Build unique pairs preserving order (dict dedup like the original code)
+    pairs = list(dict(zip(class_uris, class_labels)).items())
+
+    # Filter by --shape_name
+    if shape_name:
+        # Strip extension if provided (e.g., "Airport.ttl" -> "Airport")
+        name = Path(shape_name).stem
+        pairs = [(uri, label) for uri, label in pairs if uri.split("/")[-1] == name]
+        if not pairs:
+            logger.warning(f"No shape found matching name '{name}' in the dataset CSV")
+
+    # Filter by --shape_dir
+    if shape_dir:
+        shape_dir_path = Path(shape_dir)
+        if not shape_dir_path.is_dir():
+            logger.warning(f"Shape directory '{shape_dir}' does not exist")
+            return []
+        # Collect basenames (without extension) of .ttl and .shex files
+        dir_basenames = set()
+        for f in shape_dir_path.iterdir():
+            if f.suffix in (".ttl", ".shex"):
+                dir_basenames.add(f.stem)
+        pairs = [(uri, label) for uri, label in pairs if uri.split("/")[-1] in dir_basenames]
+        if not pairs:
+            logger.warning(f"No shapes from CSV match files in '{shape_dir}'")
+
+    return pairs
 
 
 def main():
@@ -145,6 +204,27 @@ def main():
         help="List of keys to include from answers"
     )
 
+    # shape filtering and rerun options
+    parser.add_argument(
+        '--shape_name',
+        type=str,
+        default=None,
+        required=False,
+        help="Process only this shape (e.g., 'Airport', 'Q4220917'). Accepts with or without extension."
+    )
+    parser.add_argument(
+        '--shape_dir',
+        type=str,
+        default=None,
+        required=False,
+        help="Directory of shape files; only CSV shapes with a matching file (.ttl/.shex) will be processed."
+    )
+    parser.add_argument(
+        '--force',
+        action='store_true',
+        help="Force rerun even if output already exists."
+    )
+
     args = parser.parse_args()
 
     if args.save_log:
@@ -165,9 +245,39 @@ def main():
     else:
         instance_of_uri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 
+    # Resolve shape list based on filters
+    shapes = resolve_shape_list(
+        class_uris, class_labels,
+        shape_name=args.shape_name,
+        shape_dir=args.shape_dir,
+    )
+
+    # Summary logging
+    total_shapes = len(shapes)
+    if total_shapes == 0:
+        logger.warning("No shapes to process after filtering. Exiting.")
+        return
+
+    skipped = 0
+    to_process = []
+    for class_uri, class_label in shapes:
+        class_id = class_uri.split("/")[-1]
+        if not args.force and args.output_dir:
+            output_path = get_expected_output_path(args.task, args.syntax, args.output_dir, class_id)
+            if output_path.exists() and output_path.stat().st_size > 0:
+                skipped += 1
+                continue
+        to_process.append((class_uri, class_label))
+
+    shape_names = [uri.split("/")[-1] for uri, _ in shapes]
+    logger.info(f"Total shapes found: {total_shapes}")
+    logger.info(f"Shapes to process: {len(to_process)}, skipped (already exist): {skipped}")
+    logger.info(f"Shape list: {shape_names}")
+
     if args.task == "prompt":
-        for class_uri, class_label in dict(zip(class_uris, class_labels)).items():
+        for class_uri, class_label in to_process:
             class_id = class_uri.split("/")[-1]
+            logger.info(f"Processing shape '{class_id}' ({class_label})")
             save_prompt_path = f"{args.output_dir}/{class_id}.json"
             prompt = construct_prompt(
                 class_uri=class_uri,
@@ -189,8 +299,9 @@ def main():
                 save_prompt_path=save_prompt_path,
             )
     elif args.task == "test_prompt":
-        for class_uri, class_label in dict(zip(class_uris, class_labels)).items():
+        for class_uri, class_label in to_process:
             class_id = class_uri.split("/")[-1]
+            logger.info(f"Processing shape '{class_id}' ({class_label})")
             save_prompt_path = f"{args.output_dir}/{class_id}.json"
             prompt = construct_perfect_input_prompt(
                 class_uri=class_uri,
@@ -224,8 +335,9 @@ def main():
             raise NotImplementedError(f"Model {args.model_name} not implemented")
         logger.info(f"Running ShEx generation using model '{args.model_name}'")
 
-        for class_uri, class_label in dict(zip(class_uris, class_labels)).items():
+        for class_uri, class_label in to_process:
             class_id = class_uri.split("/")[-1]
+            logger.info(f"Processing shape '{class_id}' ({class_label})")
             if args.mode == "agentic":
                 agentic_generation_workflow(
                     model=model,

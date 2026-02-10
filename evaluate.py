@@ -112,7 +112,7 @@ def main():
             syntax=args.syntax,
             class_urls=class_uris,
             class_labels=class_labels,
-            ground_truth_dir=f"dataset/{args.dataset}",
+            ground_truth_dir=args.ground_truth_dir,
             predicted_dir=args.predictions_dir,
         )
 

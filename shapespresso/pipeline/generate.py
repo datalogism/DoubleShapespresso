@@ -486,6 +486,9 @@ def global_generation_workflow(
         jsonld_shape = {
             "@context": {
                 "sh": "http://www.w3.org/ns/shacl#",
+                "dbo": "http://dbpedia.org/ontology/",
+                "dbr": "http://dbpedia.org/resource/",
+                "foaf": "http://xmlns.com/foaf/0.1/",
                 "geo": "http://www.opengis.net/ont/geosparql#",
                 "owl": "http://www.w3.org/2002/07/owl#",
                 "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

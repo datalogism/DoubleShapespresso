@@ -46,14 +46,11 @@ def query_local_information(
     """
     #print("HHKKKK")
     if sort_by == 'predicate_count':
-        #print("IN")
         # query for entities with the highest number of distinct properties
-        if dataset == "wes" and graph_info_path:
-         #   print("IN0")
+        if dataset in ("wes", "dbpedia") and graph_info_path:
             logger.info("Load 'predicate_count' sorted entities")
             instances = json.loads(Path(graph_info_path).read_text(encoding="utf-8"))[class_uri][:num_instances]
         else:
-          #  print("IN1")
             instances = query_instances_predicate_count(
                 class_uri=class_uri,
                 dataset=dataset,

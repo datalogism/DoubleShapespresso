@@ -42,6 +42,28 @@ java -Xmx10g -jar corese-server-4.5.0.jar -init "config.properties"
 ```
 6- The KB endpoint is now accesible via  'http://localhost:8080/sparql'
 
+## Shape Filtering and Rerun Options
+
+Three optional arguments allow selective processing and idempotency:
+
+| Argument | Description |
+|----------|-------------|
+| `--shape_name` | Process only the specified shape (e.g., `Airport`, `Q4220917`). Accepts with or without file extension. |
+| `--shape_dir` | Directory of shape files (`.ttl`/`.shex`). Only CSV shapes with a matching file in this directory will be processed. |
+| `--force` | Force rerun even if output already exists. By default, shapes with existing non-empty output are skipped. |
+
+**Examples:**
+```bash
+# Process a single shape
+python main.py --task prompt --dataset dbpedia --mode local --shape_name Airport ...
+
+# Process only shapes that have ground truth in a directory
+python main.py --task prompt --dataset dbpedia --mode local --shape_dir dataset/SHACL/dbpedia-v1/ ...
+
+# Force rerun of all shapes (ignore existing outputs)
+python main.py --task prompt --dataset dbpedia --mode local --force ...
+```
+
 ## Prompt generation
 ### YAGO SHACL
 #### local

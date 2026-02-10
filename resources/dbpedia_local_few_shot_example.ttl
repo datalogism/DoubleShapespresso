@@ -1,0 +1,89 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<http://shaclshapes.org/ScientistShape> a sh:NodeShape ;
+    sh:targetClass dbo:Scientist ;
+    sh:property [
+        sh:path dbo:birthDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path dbo:deathDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path dbo:birthPlace ;
+        sh:class dbo:Place ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path dbo:deathPlace ;
+        sh:class dbo:Place ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path dbo:almaMater ;
+        sh:class dbo:EducationalInstitution ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:institution ;
+        sh:class dbo:Organisation ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:award ;
+        sh:class dbo:Award ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:nationality ;
+        sh:class dbo:Country ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:doctoralAdvisor ;
+        sh:class dbo:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:doctoralStudent ;
+        sh:class dbo:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:spouse ;
+        sh:class dbo:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:knownFor ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:academicDiscipline ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path dbo:birthName ;
+        sh:datatype rdf:langString ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path foaf:name ;
+        sh:datatype rdf:langString ;
+        sh:minCount 0
+    ] .
