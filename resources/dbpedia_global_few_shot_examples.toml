@@ -278,3 +278,11 @@
 "example_39.cardinality_distribution" = ""
 "example_39.datatype_of_objects" = "IRI"
 "answer_39.shaclj" = "{'@id': '_:ScientiststateOfOrigin', 'sh:path': 'http://dbpedia.org/ontology/stateOfOrigin', 'sh:minCount': 0, 'sh:maxCount': 1, 'sh:class': 'http://dbpedia.org/ontology/Country'}"
+"example_40.class_uri" = "http://dbpedia.org/ontology/Scientist"
+"example_40.predicate_uri" = "http://dbpedia.org/ontology/affiliation"
+"example_40.triple_examples" = ["dbr:Alan_Turing dbo:affiliation dbr:University_of_Manchester", "dbr:Alan_Turing dbo:affiliation dbr:Government_Communications_Headquarters"]
+"example_40.frequency" = "3.85% instance(s) in the class use the predicate"
+"example_40.cardinality_distribution" = " 3.85% instances in the class have 1object(s) when using the property,\n"
+"example_40.datatype_of_objects" = "IRI"
+"example_40.object_class_distribution" = "48.00% of subjects have objects in class dbo:Organisation, 35.00% of subjects have objects in class dbo:EducationalInstitution, 10.00% of subjects have objects in class dbo:GovernmentAgency"
+"answer_40.shaclj" = "{'@id': '_:Scientistaffiliation', 'sh:path': 'http://dbpedia.org/ontology/affiliation', 'sh:minCount': 0, 'sh:maxCount': -1, 'sh:or': [{'sh:class': 'http://dbpedia.org/ontology/Organisation'}, {'sh:class': 'http://dbpedia.org/ontology/EducationalInstitution'}]}"

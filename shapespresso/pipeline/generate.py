@@ -446,7 +446,7 @@ def global_generation_workflow(
                             }
                         }
                     }
-                    triple_constraints.append(triple_constraint)
+                    triple_constraintsc.append(triple_constraint)
                     value_shapes.append(value_shape)
 
                 elif response.type == "values_constraint":
