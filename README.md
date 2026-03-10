@@ -11,16 +11,34 @@ Translation of Yago to SHACL.
 
 ## CHECKLIST
 
-- [x] YAGO Shacl translation + validation of every shape using SHACLplayground
-- [x] First draft Dbpedia Shacl annotation  based on Text2KGBench micro-ontologies
-- [ ] First draft Wikidata annotation  based on Text2KGBench micro-ontologies
-- [x] Developing scripts for DBpedia statistics needed for global settings
-- [x] Adapting the prompts to local/triples/global settings adapted to DBpedia/SHACL
-- [x] Generate prompt for Yago / SHACL 
-- [ ] Generate prompt for DBpedia / SHACL (triples no finished)
-- [x] Adapting generation for local / triple settings
-- [ ] Adapting generation for global setting
-- [ ] Adapting the evalution to SHACL
+### Datasets & Annotations
+- [x] YAGO SHACL translation + validation of every shape using SHACLplayground (38 shapes in `dataset/SHACL/yago/`)
+- [x] First draft DBpedia SHACL annotation based on Text2KGBench micro-ontologies (v0: 18 shapes, v1: 19 shapes in `dataset/SHACL/dbpedia-v0/` and `dataset/SHACL/dbpedia-v1/`)
+- [ ] First draft Wikidata (WES) SHACL annotation based on Text2KGBench micro-ontologies
+
+### DBpedia Scripts & Resources
+- [x] Scripts for DBpedia statistics needed for global settings (`script_DBpedia/`)
+- [x] DBpedia predicate count instances (`resources/dbpedia_predicate_count_instances.json`)
+- [x] DBpedia global few-shot examples (`resources/dbpedia_global_few_shot_examples.toml`)
+- [x] DBpedia local few-shot example (`resources/dbpedia_local_few_shot_example.ttl`)
+
+### Prompt Generation
+- [x] Prompts adapted to local/triples/global settings for DBpedia/SHACL
+- [x] Generate prompt for YAGO / SHACL (local, triples, global)
+- [x] Generate prompt for DBpedia / SHACL — local and global
+- [ ] Generate prompt for DBpedia / SHACL — **triples mode not finished**
+
+### Generation
+- [x] Generation adapted for local and triples settings (DBpedia/SHACL)
+- [ ] Generation adapted for **global setting** (DBpedia/SHACL):
+  - [ ] Property filtering (cardinality prediction) — validate for DBpedia
+  - [ ] Node constraint generation — validate for DBpedia
+  - [ ] Structured output merge into final SHACL shape — validate for DBpedia
+
+### Evaluation
+- [ ] Adapt evaluation to SHACL shapes:
+  - [ ] Classification metrics (precision/recall/F1) for SHACL property shapes
+  - [ ] Similarity metrics (Tree Edit Distance) for SHACL
 
 ## DBpedia endpoint
 The endpoint used here is [Corese](https://github.com/Wimmics/corese), a Software platform for the Semantic Web of Linked Data. 

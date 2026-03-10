@@ -3,7 +3,8 @@
     "allow": [
       "Bash(source:*)",
       "Bash(python -m pytest:*)",
-      "Bash(python3 -m pytest:*)"
+      "Bash(python3 -m pytest:*)",
+      "Bash(find /mnt/c/Users/doccr/PycharmProjects/DoubleShapespresso -maxdepth 1 -name \"*.csv\" | xargs ls -la)"
     ]
   }
 }
