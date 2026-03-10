@@ -1,0 +1,104 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix yago: <http://yago-knowledge.org/resource/> .
+
+<http://shaclshapes.org/ScientistShape> a sh:NodeShape ;
+    sh:targetClass yago:Scientist ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue yago:Scientist ;
+        sh:minCount 1
+    ] ,
+    [
+        sh:path rdfs:label ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1
+    ] ,
+    [
+        sh:path rdfs:comment ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1
+    ] ,
+    [
+        sh:path schema:birthDate ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path schema:deathDate ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path schema:birthPlace ;
+        sh:class schema:Place ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path schema:deathPlace ;
+        sh:class schema:Place ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path schema:alumniOf ;
+        sh:class schema:EducationalOrganization ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:affiliation ;
+        sh:class schema:Organization ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:award ;
+        sh:class yago:Award ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:nationality ;
+        sh:class schema:Country ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:gender ;
+        sh:class yago:Gender ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path schema:spouse ;
+        sh:class schema:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:knowsLanguage ;
+        sh:class schema:Language ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path yago:doctoralAdvisor ;
+        sh:class schema:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path yago:studentOf ;
+        sh:class schema:Person ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:image ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path schema:mainEntityOfPage ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 0
+    ] .

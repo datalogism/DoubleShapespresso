@@ -1,0 +1,11 @@
+PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX ex: <http://example.org/>
+
+start = @<Person>
+
+<Person> {
+  schema:name xsd:string ;
+  schema:birthDate xsd:date ? ;
+  schema:age xsd:integer ?
+}

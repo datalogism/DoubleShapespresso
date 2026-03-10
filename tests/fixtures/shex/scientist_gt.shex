@@ -1,0 +1,27 @@
+PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX yago: <http://yago-knowledge.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+start = @<Scientist>
+
+<Scientist> {
+  rdfs:label rdf:langString + ;
+  schema:birthDate xsd:dateTime ? ;
+  schema:birthPlace @<Place> ? ;
+  schema:nationality @<Country> * ;
+  schema:award @<Award> *
+}
+
+<Place> {
+  rdf:type [ schema:Place ]
+}
+
+<Country> {
+  rdf:type [ schema:Country ]
+}
+
+<Award> {
+  rdf:type [ yago:Award ]
+}

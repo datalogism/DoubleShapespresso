@@ -1,0 +1,32 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix yago: <http://yago-knowledge.org/resource/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<http://shaclshapes.org/ScientistShape> a sh:NodeShape ;
+    sh:targetClass yago:Scientist ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path schema:birthDate ;
+        sh:datatype xsd:dateTime ;
+        sh:maxCount 1
+    ] ;
+    sh:property [
+        sh:path schema:birthPlace ;
+        sh:class schema:Place ;
+        sh:maxCount 1
+    ] ;
+    sh:property [
+        sh:path schema:nationality ;
+        sh:class schema:Country
+    ] ;
+    sh:property [
+        sh:path schema:award ;
+        sh:class yago:Award
+    ] .

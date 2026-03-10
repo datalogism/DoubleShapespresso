@@ -1,0 +1,55 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+
+<http://shaclshapes.org/FilmAwardShape> a sh:NodeShape ;
+    sh:targetClass wd:Q4220917 ;
+    sh:property [
+        sh:path wdt:P31 ;
+        sh:class wd:Q4220917 ;
+        sh:minCount 1
+    ] ,
+    [
+        sh:path rdfs:label ;
+        sh:datatype rdf:langString ;
+        sh:minCount 1
+    ] ,
+    [
+        sh:path wdt:P1027 ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path wdt:P361 ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path wdt:P17 ;
+        sh:class wd:Q6256 ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path wdt:P131 ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path wdt:P571 ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 0 ;
+        sh:maxCount 1
+    ] ,
+    [
+        sh:path wdt:P856 ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 0
+    ] ,
+    [
+        sh:path wdt:P18 ;
+        sh:datatype xsd:anyURI ;
+        sh:minCount 0
+    ] .
